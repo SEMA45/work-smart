@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { FC, Suspense, lazy } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom"; 
+import SignIn from "./Pages/Auth/SignIn";
+import AppShell from "./Pages/App Shell & Main/AppShell";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="overflow-hidden">
+      <BrowserRouter>
+        <Suspense
+          fallback={
+            <div className="h-screen w-screen bg-slate-900 gap-4 flex flex-col items-center justify-center">
+              {/* <!--card--> */}
+            </div>
+          }
         >
-          Learn React
-        </a>
-      </header>
+          <Routes>
+            {/**Sign In ======================== */}
+            <Route path="/login" element={<SignIn />} />
+            <Route path="/app" element={<AppShell />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
     </div>
   );
 }
