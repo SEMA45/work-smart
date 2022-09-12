@@ -1,9 +1,10 @@
-import { FC, Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom"; 
+import { FC, Suspense } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignIn from "./Pages/Auth/SignIn";
 import AppShell from "./Pages/App Shell & Main/AppShell";
+import Landing from "./Pages/Landing/Landing";
 
-function App() {
+const App: FC = () => {
   return (
     <div className="overflow-hidden">
       <BrowserRouter>
@@ -16,6 +17,7 @@ function App() {
         >
           <Routes>
             {/**Sign In ======================== */}
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<SignIn />} />
             <Route path="/app" element={<AppShell />} />
           </Routes>
@@ -23,6 +25,6 @@ function App() {
       </BrowserRouter>
     </div>
   );
-}
+};
 
 export default App;

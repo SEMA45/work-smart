@@ -1,5 +1,5 @@
 import { FC } from "react";
-import logo from "../../Asserts/lightLogo.png";
+import logo from "../../Asserts/blueLogo.png";
 import {
   TbSearch,
   TbSmartHome,
@@ -23,8 +23,8 @@ const AppShell: FC<Props> = () => {
       {/**SIde Nav */}
       <div className="min-w-[14.5rem] w-[14.5rem] h-full bg-blue-600 flex flex-col justify-between">
         <div className="w-ful h-fit">
-          <div className="w-full min-h-[3.5rem] h-14 bg-blue-700 flex justify-center items-center">
-            <img src={logo} alt="logo" className="w-40 mt-2 object-center" />
+          <div className="w-full min-h-[3.5rem] h-14 bg-blue-300 flex justify-center items-center">
+            <img src={logo} alt="logo" className="w-40 object-center" />
           </div>
           <label
             htmlFor="uni_search"

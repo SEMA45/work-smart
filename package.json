@@ -24,6 +24,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "release": "standard-version",
+    "commit": "cz",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

@@ -1,20 +1,20 @@
 import { FC } from "react";
 import { TbSchool, TbMail, TbLock } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
-import logo from "../../Asserts/shortBlueLogo.png";
+import logo from "../../Asserts/blueLogo.png";
 import signInImg from "../../Asserts/signin.png";
-import { supabase } from "./Supabase";
+//import { supabase } from "./Supabase";
 
 type Props = {};
 
 const SignIn: FC<Props> = () => {
   const navigate = useNavigate();
-  const signIn = async () => {
-    const { user, session, error } = await supabase.auth.signIn({
-      email: "example@email.com",
-      password: "example-password",
-    });
-  };
+  // const signIn = async () => {
+  //   const { user, session, error } = await supabase.auth.signIn({
+  //     email: "example@email.com",
+  //     password: "example-password",
+  //   });
+  // };
 
   const handleSignIn = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -26,13 +26,13 @@ const SignIn: FC<Props> = () => {
     <div className="w-screen h-screen min-h-[40rem] grid grid-cols-1 lg:grid-cols-2">
       <div className="col-span-1 h-full flex flex-col justify-center items-center">
         {/**Logo */}
-        <img src={logo} alt="logo" className="w-14 absolute left-2 top-2" />
+        <img src={logo} alt="logo" className="w-40 absolute left-2 top-2" />
         {/**Sign In Form */}
         <form
           onSubmit={(e) => handleSignIn(e)}
           className="min-w-[25rem] max-w-[27rem] w-[55%] rounded-xl flex flex-col justify-center items-center p-8 relative"
         >
-          <h1 className="text-[2.5rem] font-bold text-gray-600">
+          <h1 className="text-[2.5rem] font-bold text-gray-700">
             Welcome back
           </h1>
           <h2 className="text-lg text-gray-500">Let's get you signed in.</h2>
