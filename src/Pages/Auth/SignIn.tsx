@@ -1,14 +1,32 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
+import { Root } from "react-dom/client";
 import { TbSchool, TbMail, TbLock } from "react-icons/tb";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import logo from "../../Asserts/blueLogo.png";
 import signInImg from "../../Asserts/signin.png";
+import { AppDispatch, RootState } from "../../Redux/store";
+import { updateAlert } from "../../Redux/Slices/NotificationsSlice";
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
+import AlertsWrapper from "../../Components/Toast Notifications/AlertsWrapper";
+import { updateUser } from "../../Redux/Slices/UserSlice";
 //import { supabase } from "./Supabase";
 
 type Props = {};
 
 const SignIn: FC<Props> = () => {
   const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
+  const alerts = useSelector(
+    (state: RootState) => state.NotificationsData.alerts
+  );
+  const user = useSelector((state: RootState) => state.UserInfo.user);
+  const [submitStatus, setStatus] = useState<boolean>(false);
+  const [input, setInput] = useState({
+    school: "",
+    email: "",
+    password: "",
+  });
   // const signIn = async () => {
   //   const { user, session, error } = await supabase.auth.signIn({
   //     email: "example@email.com",
@@ -16,17 +34,90 @@ const SignIn: FC<Props> = () => {
   //   });
   // };
 
+  const crypt = (salt: any, text: any) => {
+    const textToChars = (text: any) =>
+      text.split("").map((c: any) => c.charCodeAt(0));
+    const byteHex = (n: any) => ("0" + Number(n).toString(16)).substr(-2);
+    const applySaltToChar = (code: any) =>
+      textToChars(salt).reduce((a: any, b: any) => a ^ b, code);
+    return text
+      .split("")
+      .map(textToChars)
+      .map(applySaltToChar)
+      .map(byteHex)
+      .join("");
+  };
+
   const handleSignIn = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    navigate("/app");
+    setStatus(true);
+    fetch(
+      `https://script.google.com/macros/s/AKfycbwofTWDacZStH7LsC0FkWbACTVjWtWCHUCjG9pq9nkqcr8aPzLZZesPUz3ty8cWTgkx7g/exec?action=signin&email=${
+        input.email
+      }&password=${crypt(input.email, input.password)}&school=${input.school}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.isAuthenticated == true) {
+          setStatus(true);
+          dispatch(
+            updateAlert([
+              ...alerts,
+              {
+                message: "Successfully signed in",
+                color: "bg-green-200",
+                id: new Date().getTime(),
+              },
+            ])
+          );
+          dispatch(updateUser(data));
+          window.localStorage.setItem("user", JSON.stringify(data));
+          setInput({
+            school: "",
+            email: "",
+            password: "",
+          });
+          navigate("/app");
+        } else if (data.isAuthenticated == false) {
+          setStatus(false);
+          dispatch(
+            updateAlert([
+              ...alerts,
+              {
+                message: data.message,
+                color: "bg-red-200",
+                id: new Date().getTime(),
+              },
+            ])
+          );
+        }
+      })
+      .catch(() => {
+        setStatus(false);
+        dispatch(
+          updateAlert([
+            ...alerts,
+            {
+              message: "Failed to sign in",
+              color: "bg-red-200",
+              id: new Date().getTime(),
+            },
+          ])
+        );
+      });
   };
+
+  //Automatically Log User If Aleady Signed In
+  useEffect(() => {
+    user?.isAuthenticated === true && navigate("/app");
+  }, [user]);
 
   //Component ==============
   return (
     <div className="w-screen h-screen min-h-[40rem] grid grid-cols-1 lg:grid-cols-2">
       <div className="col-span-1 h-full flex flex-col justify-center items-center">
         {/**Logo */}
-        <img src={logo} alt="logo" className="w-40 absolute left-2 top-2" />
+        <img src={logo} alt="logo" className="w-36 absolute left-2 top-2" />
         {/**Sign In Form */}
         <form
           onSubmit={(e) => handleSignIn(e)}
@@ -41,10 +132,14 @@ const SignIn: FC<Props> = () => {
             className="w-full flex justify-center mt-8 relative"
           >
             <input
+              onChange={(e) => {
+                setInput((prev) => ({ ...prev, school: e.target.value }));
+              }}
+              value={input?.school}
               type="text"
               name="school_name"
               id="school_name"
-              className="w-[80%] h-10 border-b border-gray-200 placeholder:text-xs placeholder:text-gray-400 text-gray-700 focus:ring-0 focus:outline-none focus:border-0 focus:border-b focus:border-blue-600 transition-all pr-6 pl-2"
+              className="w-[80%] h-10 border-b border-gray-200 placeholder:text-xs placeholder:text-gray-400 text-gray-700 text-sm focus:ring-0 focus:outline-none focus:border-0 focus:border-b focus:border-blue-600 transition-all pr-6 pl-2"
               placeholder="School Name"
             />
             <TbSchool className="absolute right-12 top-3 text-lg text-gray-400" />
@@ -54,10 +149,14 @@ const SignIn: FC<Props> = () => {
             className="w-full flex justify-center mt-2 relative"
           >
             <input
+              onChange={(e) => {
+                setInput((prev) => ({ ...prev, email: e.target.value }));
+              }}
+              value={input?.email}
               type="email"
               name="email"
               id="email"
-              className="w-[80%] h-10 border-b border-gray-200 placeholder:text-xs placeholder:text-gray-400 text-gray-700 focus:ring-0 focus:outline-none focus:border-0 focus:border-b focus:border-blue-600 transition-all pr-6 pl-2"
+              className="w-[80%] h-10 border-b border-gray-200 placeholder:text-xs placeholder:text-gray-400 text-gray-700 text-sm focus:ring-0 focus:outline-none focus:border-0 focus:border-b focus:border-blue-600 transition-all pr-6 pl-2"
               placeholder="Email"
             />
             <TbMail className="absolute right-12 top-3 text-lg text-gray-400" />
@@ -67,21 +166,37 @@ const SignIn: FC<Props> = () => {
             className="w-full flex justify-center mt-2 relative"
           >
             <input
+              onChange={(e) => {
+                setInput((prev) => ({
+                  ...prev,
+                  password: e.target.value,
+                }));
+              }}
+              value={input?.password}
+              autoComplete="off"
               type="password"
               name="password"
               id="password"
-              className="w-[80%] h-10 border-b border-gray-200 placeholder:text-xs placeholder:text-gray-400 text-gray-700 focus:ring-0 focus:outline-none focus:border-0 focus:border-b focus:border-blue-600 transition-all pr-6 pl-2"
+              className="w-[80%] h-10 border-b border-gray-200 placeholder:text-xs placeholder:text-gray-400 text-gray-700 text-sm focus:ring-0 focus:outline-none focus:border-0 focus:border-b focus:border-blue-600 transition-all pr-6 pl-2"
               placeholder="Password"
             />
             <TbLock className="absolute right-12 top-3 text-lg text-gray-400" />
           </label>
           <button
             type="submit"
-            className="mt-6 h-10 w-[80%] bg-blue-600 hover:opacity-80 transition-all duration-150 rounded-full text-white text-sm tracking-wide"
+            disabled={submitStatus}
+            className={`mt-6 h-10 w-[80%] bg-blue-600 hover:opacity-80 transition-all duration-150 rounded-full text-white text-sm tracking-wide flex justify-center items-center space-x-2 ${
+              submitStatus ? "opacity:80 cursor-not-allowed" : ""
+            }`}
           >
-            SignIn
+            <div
+              className={`h-5 w-5 border-4 border-white border-l-blue-300 rounded-full animate-spin ${
+                submitStatus ? "" : "hidden"
+              }`}
+            ></div>
+            <span>SignIn</span>{" "}
           </button>
-          <span className="mt-12 text-xs text-gray-400">
+          <span className="mt-12 text-sm text-gray-400">
             &copy; Smartfee {new Date().getFullYear()}. All rights reserved.
           </span>
         </form>
@@ -95,6 +210,9 @@ const SignIn: FC<Props> = () => {
           <br /> made easy
         </h3>
       </div>
+
+      {/**Alerts Componetn */}
+      <AlertsWrapper />
     </div>
   );
 };

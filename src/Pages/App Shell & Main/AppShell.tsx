@@ -9,22 +9,36 @@ import {
   TbUsers,
   TbLogout,
 } from "react-icons/tb";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../Redux/store";
+import { updateAlert } from "../../Redux/Slices/NotificationsSlice";
+import { updateUser } from "../../Redux/Slices/UserSlice";
 
 type Props = {};
 
 const AppShell: FC<Props> = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.UserInfo.user);
+  const alerts = useSelector(
+    (state: RootState) => state.NotificationsData.alerts
+  );
+
+  //Sign Out If not authorized
+  if (!user?.isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
 
   //Component
   return (
     <div className="w-screen h-screen bg-gray-200 flex">
-      {/**SIde Nav */}
+      {/**Side Nav */}
       <div className="min-w-[14.5rem] w-[14.5rem] h-full bg-blue-600 flex flex-col justify-between">
         <div className="w-ful h-fit">
           <div className="w-full min-h-[3.5rem] h-14 bg-blue-300 flex justify-center items-center">
-            <img src={logo} alt="logo" className="w-40 object-center" />
+            <img src={logo} alt="logo" className="w-36 object-center" />
           </div>
           <label
             htmlFor="uni_search"
@@ -104,7 +118,37 @@ const AppShell: FC<Props> = () => {
         <div className="flex justify-center items-center">
           <button
             onClick={() => {
-              navigate("/login");
+              fetch(
+                `https://script.google.com/macros/s/AKfycbwofTWDacZStH7LsC0FkWbACTVjWtWCHUCjG9pq9nkqcr8aPzLZZesPUz3ty8cWTgkx7g/exec?action=signout&email=${user?.email}&uid=${user?.uid}`
+              )
+                .then((res) => res.json())
+                .then((data) => {
+                  dispatch(
+                    updateAlert([
+                      ...alerts,
+                      {
+                        message: data.message,
+                        color: "bg-green-200",
+                        id: new Date().getTime(),
+                      },
+                    ])
+                  );
+                  dispatch(updateUser(null));
+                  navigate("/login");
+                  window.localStorage.clear();
+                })
+                .catch(() => {
+                  dispatch(
+                    updateAlert([
+                      ...alerts,
+                      {
+                        message: "Failed to sign out",
+                        color: "bg-red-200",
+                        id: new Date().getTime(),
+                      },
+                    ])
+                  );
+                });
             }}
             className="text-sm text-white flex justify-start items-center space-x-2 px-4 py-4 w-[80%] hover:opacity-80 transition-all"
           >
@@ -113,7 +157,7 @@ const AppShell: FC<Props> = () => {
           </button>
         </div>
       </div>
-      {/**SIde Nav */}
+      {/**Side Nav */}
       <div className="h-full w-[calc(100%-14rem)] flex flex-col">
         <div className="w-full min-h-[3.5rem] h-14 bg-white"></div>
       </div>
