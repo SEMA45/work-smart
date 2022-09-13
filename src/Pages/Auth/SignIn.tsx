@@ -56,7 +56,7 @@ const SignIn: FC<Props> = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        if (data.isAuthenticated == true) {
+        if (data.isAuthenticated === true) {
           setStatus(true);
           dispatch(
             updateAlert([
@@ -76,7 +76,7 @@ const SignIn: FC<Props> = () => {
             password: "",
           });
           navigate("/app");
-        } else if (data.isAuthenticated == false) {
+        } else if (data.isAuthenticated === false) {
           setStatus(false);
           dispatch(
             updateAlert([
@@ -108,7 +108,7 @@ const SignIn: FC<Props> = () => {
   //Automatically Log User If Aleady Signed In
   useEffect(() => {
     user?.isAuthenticated === true && navigate("/app");
-  }, [user]);
+  }, [user,navigate]);
 
   //Component ==============
   return (
