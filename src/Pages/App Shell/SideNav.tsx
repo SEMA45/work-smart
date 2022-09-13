@@ -1,5 +1,6 @@
 import { FC } from "react";
 import logo from "../../Asserts/blueLogo.png";
+import shortLogo from "../../Asserts/smallicon.png";
 import {
   TbSearch,
   TbSmartHome,
@@ -29,10 +30,19 @@ const SideNav:FC<Props> = () => {
 
   //Component
   return (
-    <div className="min-w-[14.5rem] w-[14.5rem] h-full bg-blue-600 flex flex-col justify-between">
+    <div className="min-w-[4rem] w-[4rem] lg:min-w-[14.5rem] lg:w-[14.5rem] h-full bg-blue-600 flex flex-col justify-between">
       <div className="w-ful h-fit">
-        <div className="w-full min-h-[3.5rem] h-14 bg-blue-300 flex justify-center items-center">
-          <img src={logo} alt="logo" className="w-36 object-center" />
+        <div className="w-full min-h-[3.5rem] h-14 bg-blue-300 flex justify-center items-center px-2 relative overflow-hidden">
+          <img
+            src={logo}
+            alt="logo"
+            className="w-36 object-center hidden lg:flex"
+          />
+          <img
+            src={shortLogo}
+            alt="logo"
+            className="w-10 object-center lg:hidden flex"
+          />
         </div>
         <label
           htmlFor="uni_search"
@@ -42,7 +52,7 @@ const SideNav:FC<Props> = () => {
             type="search"
             name="uni_search"
             id="uni_search"
-            className="h-8 w-[90%] bg-white/20 rounded-full border border-gray-200/50 placeholder:text-xs placeholder:text-gray-100 text-gray-50 text-sm focus:ring-0 focus:outline-none focus:border-white transition-all px-3 pr-8"
+            className="h-8 w-[80%] lg:w-[90%] bg-white/20 rounded-full border border-gray-200/50 placeholder:text-xs placeholder:text-gray-100 text-gray-50 text-sm focus:ring-0 focus:outline-none focus:border-white transition-all px-3 pr-8"
             placeholder="Quick find ..."
           />
           <TbSearch className="absolute right-6 text-gray-200" />
@@ -59,7 +69,7 @@ const SideNav:FC<Props> = () => {
             }`}
           >
             <TbSmartHome className="text-lg" />
-            <span className="mt-1">Dashboard</span>
+            <span className="mt-1 hidden lg:flex">Dashboard</span>
           </NavLink>
           <NavLink
             to=""
@@ -70,7 +80,7 @@ const SideNav:FC<Props> = () => {
             }`}
           >
             <TbChartDonut className="text-lg" />
-            <span className="mt-1">Grades Report</span>
+            <span className="mt-1 hidden lg:flex">Grades Report</span>
           </NavLink>
           <NavLink
             to=""
@@ -81,7 +91,7 @@ const SideNav:FC<Props> = () => {
             }`}
           >
             <TbChartAreaLine className="text-lg" />
-            <span className="mt-1">Overall Report</span>
+            <span className="mt-1 hidden lg:flex">Overall Report</span>
           </NavLink>
           <NavLink
             to=""
@@ -92,7 +102,7 @@ const SideNav:FC<Props> = () => {
             }`}
           >
             <TbFriends className="text-lg" />
-            <span className="mt-1">Students</span>
+            <span className="mt-1 hidden lg:flex">Students</span>
           </NavLink>
           <NavLink
             to=""
@@ -103,7 +113,7 @@ const SideNav:FC<Props> = () => {
             }`}
           >
             <TbSettings className="text-lg" />
-            <span className="mt-1">Settings</span>
+            <span className="mt-1 hidden lg:flex">Settings</span>
           </NavLink>
           <NavLink
             to=""
@@ -114,7 +124,7 @@ const SideNav:FC<Props> = () => {
             }`}
           >
             <TbUsers className="text-lg" />
-            <span className="mt-1">Team & Users</span>
+            <span className="mt-1 hidden lg:flex">Team & Users</span>
           </NavLink>
         </div>
       </div>
@@ -158,7 +168,7 @@ const SideNav:FC<Props> = () => {
           className="text-sm text-white flex justify-start items-center space-x-2 px-4 py-4 w-[80%] hover:opacity-80 transition-all"
         >
           <TbLogout className="text-xl" />
-          <span className="mt-1">Sign Out</span>
+          <span className="mt-1 hidden lg:flex">Sign Out</span>
         </button>
       </div>
     </div>

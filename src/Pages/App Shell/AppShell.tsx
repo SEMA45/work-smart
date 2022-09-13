@@ -21,10 +21,10 @@ const AppShell: FC<Props> = () => {
       {/**Side Nav */}
       <SideNav />
       {/**Side Nav */}
-      <div className="h-full w-[calc(100%-14rem)] flex flex-col">
+      <div className="h-full w-[calc(100%-4rem)] lg:w-[calc(100%-14rem)] flex flex-col">
         <TopNav />
         {/**Main */}
-        <div className="w-full h-[calc(100%-3.5rem)]">
+        <div className="w-full h-[calc(100%-3.5rem)] overflow-hidden overflow-y-scroll no-scrollbar no-scrollbar::-webkit-scrollbar">
           <Outlet />
         </div>
         {/**Main */}

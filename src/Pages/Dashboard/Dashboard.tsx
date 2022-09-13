@@ -1,71 +1,20 @@
 import { FC } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../Redux/store";
-import { TbChartArcs3 } from "react-icons/tb";
-import { numberWithSpaces } from "../../Reusable Functions/Functions";
+import GradesStatistics from "./GradesStatistics";
+import RecentActivities from "./RecentActivities";
+import Summary from "./Summary";
 
 type Props = {};
 
 const Dashboard: FC<Props> = () => {
-  const selectedCurrency = useSelector(
-    (state: RootState) => state.SchoolSettings.selectedCurrency
-  );
-  console.log(selectedCurrency);
+
   //Component
   return (
     <div
-      className={`w-full h-full bg-blue-100 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 pt-4 overflow-hidden`}
+      className={`w-full h-fit min-h-[100%] overflow-hidden overflow-y-scroll bg-blue-100 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-4 p-4`}
     >
-      <div className="col-span-1 rounded bg-white h-[22rem] border border-blue-200 overflow-hidden">
-        <div className="h-12 w-full bg-blue-200 flex items-center justify-between px-4 text-lg font-medium text-gray-600">
-          <span>Summary</span>
-          <TbChartArcs3 className="text-xl" />
-        </div>
-        <div className="w-full h-[calc(100%-3rem)] grid grid-rows-6 p-4 text-sm text-gray-700 font-medium">
-          {[
-            { name: "Total Students", value: 4657 },
-            { name: "Paid Students", value: 1490 },
-            { name: "Owing Students", value: 3167 },
-            {
-              name: "Paid Amount",
-              value:
-                selectedCurrency?.symbol +
-                " " +
-                numberWithSpaces(
-                  selectedCurrency?.rate_multiplier * Number(20467)
-                ),
-            },
-            {
-              name: "Outstanding",
-              value:
-                selectedCurrency?.symbol +
-                " " +
-                numberWithSpaces(
-                  selectedCurrency?.rate_multiplier * Number(46780)
-                ),
-            },
-            {
-              name: "Total Balance",
-              value:
-                selectedCurrency?.symbol +
-                " " +
-                numberWithSpaces(
-                  selectedCurrency?.rate_multiplier * Number(67247)
-                ),
-            },
-          ].map((item: any, index: number) => {
-            return (
-              <div
-                key={index}
-                className="w-full row-span-1 flex justify-between items-center last:border-0 border-b border-gray-200 capitalize"
-              >
-                <span>{item.name}</span>
-                <span className="text-blue-600">{item.value}</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+     <Summary/>
+	 <GradesStatistics/>
+	 <RecentActivities/>
     </div>
   );
 };
