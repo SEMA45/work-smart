@@ -22,7 +22,7 @@ const TopNav: FC<Props> = () => {
   const selectedCurrency = useSelector(
     (state: RootState) => state.SchoolSettings.selectedCurrency
   );
-
+  
   //Component =====
   return (
     <div className="w-full min-h-[3.5rem] h-14 bg-white flex items-center justify-between px-4">
@@ -31,10 +31,7 @@ const TopNav: FC<Props> = () => {
           <select
             onChange={(e: any) => {
               dispatch(selectCurrency(JSON.parse(e.target.value)));
-              window.localStorage.setItem(
-                "selectedCurrency",
-                JSON.stringify(e.target.value)
-              );
+              window.localStorage.setItem("selectedCurrency", e.target.value);
             }}
             className="h-full w-full bg-inherit text-gray-700 focus:outline-none uppercase text-xs"
           >
@@ -48,7 +45,10 @@ const TopNav: FC<Props> = () => {
             })}
           </select>
         </div>
-        <div className="h-8 w-8 lg:w-36 border-l-0 border border-gray-200 rounded-r text-gray-700 capitalize text-sm flex items-center pt-1 px-2 relative"><span className="hidden lg:flex"> Date</span> <TbCalendarMinus className="absolute top-2 right-2 text-base"/></div>
+        <div className="h-8 w-8 lg:w-36 border-l-0 border border-gray-200 rounded-r text-gray-700 capitalize text-sm flex items-center pt-1 px-2 relative">
+          <span className="hidden lg:flex"> Date</span>{" "}
+          <TbCalendarMinus className="absolute top-2 right-2 text-base" />
+        </div>
       </div>
 
       <div className="h-full flex items-center space-x-2">
