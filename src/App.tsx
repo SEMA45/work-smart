@@ -1,8 +1,9 @@
 import { FC, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignIn from "./Pages/Auth/SignIn";
-import AppShell from "./Pages/App Shell & Main/AppShell";
 import Landing from "./Pages/Landing/Landing";
+import AppShell from "./Pages/App Shell/AppShell";
+import Dashboard from "./Pages/Dashboard/Dashboard";
 
 const App: FC = () => {
   return (
@@ -19,7 +20,9 @@ const App: FC = () => {
             {/**Sign In ======================== */}
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<SignIn />} />
-            <Route path="/app" element={<AppShell />} />
+            <Route path="/app" element={<AppShell />}>
+              <Route path="" element={<Dashboard />} />
+            </Route>
           </Routes>
         </Suspense>
       </BrowserRouter>

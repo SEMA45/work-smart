@@ -38,7 +38,7 @@ const Landing: FC<Props> = () => {
           Managing <span className="text-blue-600">your levy</span>
           <br /> made simple
         </h1>
-        <h2 className="text-center text-gray-600 text-lg">
+        <h2 className="mt-6 text-center text-gray-600 text-lg">
           Tracking tuition fee payments, credits, and statements is tedious.
           With Smartfee there's <br />
           always a room for easy, your all in one tool.

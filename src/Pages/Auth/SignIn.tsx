@@ -1,13 +1,11 @@
 import { FC, useEffect, useState } from "react";
-import { Root } from "react-dom/client";
 import { TbSchool, TbMail, TbLock } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import logo from "../../Asserts/blueLogo.png";
 import signInImg from "../../Asserts/signin.png";
 import { AppDispatch, RootState } from "../../Redux/store";
 import { updateAlert } from "../../Redux/Slices/NotificationsSlice";
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 import AlertsWrapper from "../../Components/Toast Notifications/AlertsWrapper";
 import { updateUser } from "../../Redux/Slices/UserSlice";
 //import { supabase } from "./Supabase";
@@ -117,7 +115,9 @@ const SignIn: FC<Props> = () => {
     <div className="w-screen h-screen min-h-[40rem] grid grid-cols-1 lg:grid-cols-2">
       <div className="col-span-1 h-full flex flex-col justify-center items-center">
         {/**Logo */}
-        <img src={logo} alt="logo" className="w-36 absolute left-2 top-2" />
+        <Link to="/">
+          <img src={logo} alt="logo" className="w-36 absolute left-2 top-2" />
+        </Link>
         {/**Sign In Form */}
         <form
           onSubmit={(e) => handleSignIn(e)}
