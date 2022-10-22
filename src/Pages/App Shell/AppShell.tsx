@@ -1,9 +1,10 @@
 import { FC } from "react";
-import { Navigate, Outlet} from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
 import SideNav from "./SideNav";
 import TopNav from "./TopNav";
+import AlertsWrapper from "../../Components/Toast Notifications/AlertsWrapper";
 
 type Props = {};
 
@@ -18,6 +19,8 @@ const AppShell: FC<Props> = () => {
   //Component
   return (
     <div className="w-screen h-screen bg-blue-100 flex">
+      {/**Alerts */}
+      <AlertsWrapper />
       {/**Side Nav */}
       <SideNav />
       {/**Side Nav */}

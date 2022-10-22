@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialLocation =
-  window.localStorage.getItem("locationPath") || "dndHelp-Desk";
+  window.localStorage.getItem("locationPath") || "Smartfee";
 
 //Get Theme From Local Storage ==============
 const initialTheme = localStorage.getItem("theme");

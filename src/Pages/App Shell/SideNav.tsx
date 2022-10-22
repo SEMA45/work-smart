@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { FC,useState } from "react";
+import packageJson from "../../../package.json";
 import logo from "../../Asserts/blueLogo.png";
 import shortLogo from "../../Asserts/smallicon.png";
 import {
@@ -10,6 +11,8 @@ import {
   TbUsers,
   TbLogout,
   TbFriends,
+  TbChecklist,
+  TbFileSpreadsheet,
 } from "react-icons/tb";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,11 +22,12 @@ import { updateUser } from "../../Redux/Slices/UserSlice";
 
 type Props = {};
 
-const SideNav:FC<Props> = () => {
+const SideNav: FC<Props> = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const user = useSelector((state: RootState) => state.UserInfo.user);
+  const [signingOut,setSigningOut] = useState<boolean>(false)
   const alerts = useSelector(
     (state: RootState) => state.NotificationsData.alerts
   );
@@ -32,7 +36,7 @@ const SideNav:FC<Props> = () => {
   return (
     <div className="min-w-[4rem] w-[4rem] lg:min-w-[14.5rem] lg:w-[14.5rem] h-full bg-blue-600 flex flex-col justify-between">
       <div className="w-ful h-fit">
-        <div className="w-full min-h-[3.5rem] h-14 bg-blue-300 flex justify-center items-center px-2 relative overflow-hidden">
+        <div className="w-full min-h-[3.5rem] h-14 bg-blue-300 flex items-center justify-center lg:justify-between px-1 pr-3  relative overflow-hidden">
           <img
             src={logo}
             alt="logo"
@@ -43,6 +47,9 @@ const SideNav:FC<Props> = () => {
             alt="logo"
             className="w-10 object-center lg:hidden flex"
           />
+          <div className="bg-blue-400 px-2 py-0.5 pt-1 rounded-full border border-blue-500 text-[0.65rem] text-blue-700 hidden lg:flex items-center justify-center">
+            V.{packageJson.version}
+          </div>
         </div>
         <label
           htmlFor="uni_search"
@@ -72,26 +79,26 @@ const SideNav:FC<Props> = () => {
             <span className="mt-1 hidden lg:flex">Dashboard</span>
           </NavLink>
           <NavLink
+            to="/app/balance_sheet"
+            className={`h-10 w-full flex items-center space-x-2 px-4 text-sm text-white ${
+              location.pathname === "/app/balance_sheet"
+                ? "border-l-4 border-white bg-white/20"
+                : "border-l-4 border-transparent"
+            }`}
+          >
+            <TbFileSpreadsheet className="text-lg" />
+            <span className="mt-1 hidden lg:flex">Balance Sheet</span>
+          </NavLink>
+          <NavLink
             to=""
             className={`h-10 w-full flex items-center space-x-2 px-4 text-sm text-white ${
-              location.pathname === "/grades-report"
+              location.pathname === "/overal-report"
                 ? "border-l-4 border-white bg-white/20"
                 : "border-l-4 border-transparent"
             }`}
           >
             <TbChartDonut className="text-lg" />
-            <span className="mt-1 hidden lg:flex">Grades Report</span>
-          </NavLink>
-          <NavLink
-            to=""
-            className={`h-10 w-full flex items-center space-x-2 px-4 text-sm text-white ${
-              location.pathname === "/overall-report"
-                ? "border-l-4 border-white bg-white/20"
-                : "border-l-4 border-transparent"
-            }`}
-          >
-            <TbChartAreaLine className="text-lg" />
-            <span className="mt-1 hidden lg:flex">Overall Report</span>
+            <span className="mt-1 hidden lg:flex">Overal Report</span>
           </NavLink>
           <NavLink
             to=""
@@ -103,6 +110,28 @@ const SideNav:FC<Props> = () => {
           >
             <TbFriends className="text-lg" />
             <span className="mt-1 hidden lg:flex">Students</span>
+          </NavLink>
+          <NavLink
+            to=""
+            className={`h-10 w-full flex items-center space-x-2 px-4 text-sm text-white ${
+              location.pathname === "/students-management"
+                ? "border-l-4 border-white bg-white/20"
+                : "border-l-4 border-transparent"
+            }`}
+          >
+            <TbChecklist className="text-lg" />
+            <span className="mt-1 hidden lg:flex">Attendance Reg</span>
+          </NavLink>
+          <NavLink
+            to=""
+            className={`h-10 w-full flex items-center space-x-2 px-4 text-sm text-white ${
+              location.pathname === "/attadance-report"
+                ? "border-l-4 border-white bg-white/20"
+                : "border-l-4 border-transparent"
+            }`}
+          >
+            <TbChartAreaLine className="text-lg" />
+            <span className="mt-1 hidden lg:flex">Attendance Report</span>
           </NavLink>
           <NavLink
             to=""
@@ -132,9 +161,11 @@ const SideNav:FC<Props> = () => {
       {/**Sign Out */}
       <div className="flex justify-center items-center">
         <button
+          disabled={signingOut}
           onClick={() => {
+            setSigningOut(true);
             fetch(
-              `https://script.google.com/macros/s/AKfycbwofTWDacZStH7LsC0FkWbACTVjWtWCHUCjG9pq9nkqcr8aPzLZZesPUz3ty8cWTgkx7g/exec?action=signout&email=${user?.email}&uid=${user?.uid}`
+              `https://script.google.com/macros/s/AKfycbw0I-xRvrHTdVWOi8naWjXzMPVwxe6F92qOjubeEjrtfpZ2AeY1oTAGJ_u23-3E5S6WOA/exec?action=signout&email=${user?.email}&uid=${user?.uid}`
             )
               .then((res) => res.json())
               .then((data) => {
@@ -142,12 +173,13 @@ const SideNav:FC<Props> = () => {
                   updateAlert([
                     ...alerts,
                     {
-                      message: data.message,
+                      message: data[0]?.auth.message,
                       color: "bg-green-200",
                       id: new Date().getTime(),
                     },
                   ])
                 );
+                setSigningOut(false);
                 dispatch(updateUser(null));
                 navigate("/login");
                 window.localStorage.clear();
@@ -163,12 +195,16 @@ const SideNav:FC<Props> = () => {
                     },
                   ])
                 );
+                setSigningOut(false);
               });
           }}
           className="text-sm text-white flex justify-start items-center space-x-2 px-4 py-4 w-[80%] hover:opacity-80 transition-all"
         >
           <TbLogout className="text-xl" />
           <span className="mt-1 hidden lg:flex">Sign Out</span>
+          {signingOut && (
+            <div className="h-4 w-4 rounded-full border-2 border-t-white border-r-white border-blue-500 animate-spin"></div>
+          )}
         </button>
       </div>
     </div>

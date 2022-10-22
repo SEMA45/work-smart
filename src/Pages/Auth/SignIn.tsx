@@ -8,7 +8,18 @@ import { AppDispatch, RootState } from "../../Redux/store";
 import { updateAlert } from "../../Redux/Slices/NotificationsSlice";
 import AlertsWrapper from "../../Components/Toast Notifications/AlertsWrapper";
 import { updateUser } from "../../Redux/Slices/UserSlice";
-//import { supabase } from "./Supabase";
+import {
+  addCurrencies,
+  addPeriods,
+  updateSchool_Obj,
+  selectTerm,
+} from "../../Redux/Slices/SchoolSettingsSlice";
+import {
+  updatePayments_Data,
+  updateStudents_Data,
+  updateUsers_Data,
+  updateCredits_Data,
+} from "../../Redux/Slices/School_DataSlice";
 
 type Props = {};
 
@@ -50,13 +61,13 @@ const SignIn: FC<Props> = () => {
     e.preventDefault();
     setStatus(true);
     fetch(
-      `https://script.google.com/macros/s/AKfycbwofTWDacZStH7LsC0FkWbACTVjWtWCHUCjG9pq9nkqcr8aPzLZZesPUz3ty8cWTgkx7g/exec?action=signin&email=${
+      `https://script.google.com/macros/s/AKfycbw0I-xRvrHTdVWOi8naWjXzMPVwxe6F92qOjubeEjrtfpZ2AeY1oTAGJ_u23-3E5S6WOA/exec?action=signin&email=${
         input.email
       }&password=${crypt(input.email, input.password)}&school=${input.school}`
     )
       .then((res) => res.json())
       .then((data) => {
-        if (data.isAuthenticated === true) {
+        if (data[0]?.auth?.isAuthenticated === true) {
           setStatus(true);
           dispatch(
             updateAlert([
@@ -68,15 +79,135 @@ const SignIn: FC<Props> = () => {
               },
             ])
           );
-          dispatch(updateUser(data));
-          window.localStorage.setItem("user", JSON.stringify(data));
+          dispatch(updateUser(data[0]?.auth));
+          dispatch(
+            addCurrencies(
+              data[0]?.school?.currencies
+                ?.split(/\[|\]/)[1]
+                ?.replace(/(},)/gim, "}},")
+                ?.split("},")
+                ?.map((data: any) => "{" + data?.split(/{|}/)[1] + "}")
+                ?.map((data: any) => {
+                  let tempdataArray = data?.split(/\{|\}|,|:/);
+                  return {
+                    name: `${tempdataArray[2]?.trim()?.replace(/"|'/gim, "")}`,
+                    symbol: `${tempdataArray[4]
+                      ?.trim()
+                      ?.replace(/"|'/gim, "")}`,
+                    rate_multiplier: `${tempdataArray[6]
+                      ?.trim()
+                      ?.replace(/"|'/gim, "")}`,
+                  };
+                })
+            )
+          );
+          dispatch(
+            selectTerm(
+              data[0]?.school?.periods_term
+                ?.split(/\[|\]/)[1]
+                ?.split(",")
+                ?.map((data: any) =>
+                  data.split(":")[1]?.split("}")[0]?.replace(/"/gim, "")?.trim()
+                )
+            )
+          );
+          dispatch(
+            addPeriods(
+              data[0]?.school?.periods_term
+                ?.split(/\[|\]/)[1]
+                ?.split(",")
+                ?.map((data: any) => ({
+                  name: data
+                    .split(":")[1]
+                    ?.split("}")[0]
+                    ?.replace(/"/gim, "")
+                    ?.trim(),
+                }))
+            )
+          );
+          dispatch(updateSchool_Obj(data[0]?.school));
+          dispatch(updatePayments_Data(data[0]?.payment_data));
+          dispatch(updateCredits_Data(data[0]?.credits));
+          dispatch(updateStudents_Data(data[0]?.students));
+          dispatch(updateUsers_Data(data[0]?.users_data));
+
+          //saving data locally ==========
+          window.localStorage.setItem("user", JSON.stringify(data[0]?.auth));
+          window.localStorage.setItem(
+            "currencies",
+            JSON.stringify(
+              data[0]?.school?.currencies
+                ?.split(/\[|\]/)[1]
+                ?.replace(/(},)/gim, "}},")
+                ?.split("},")
+                ?.map((data: any) => "{" + data?.split(/{|}/)[1] + "}")
+                ?.map((data: any) => {
+                  let tempdataArray = data?.split(/\{|\}|,|:/);
+                  return {
+                    name: `${tempdataArray[2]?.trim()?.replace(/"|'/gim, "")}`,
+                    symbol: `${tempdataArray[4]
+                      ?.trim()
+                      ?.replace(/"|'/gim, "")}`,
+                    rate_multiplier: `${tempdataArray[6]
+                      ?.trim()
+                      ?.replace(/"|'/gim, "")}`,
+                  };
+                })
+            )
+          );
+          window.localStorage.setItem(
+            "selectedTerm",
+            JSON.stringify(
+              data[0]?.school?.periods_term
+                ?.split(/\[|\]/)[1]
+                ?.split(",")
+                ?.map((data: any) =>
+                  data.split(":")[1]?.split("}")[0]?.replace(/"/gim, "")?.trim()
+                )
+            )
+          );
+          window.localStorage.setItem(
+            "periods",
+            JSON.stringify(
+              data[0]?.school?.periods_term
+                ?.split(/\[|\]/)[1]
+                ?.split(",")
+                ?.map((data: any) => ({
+                  name: data
+                    .split(":")[1]
+                    ?.split("}")[0]
+                    ?.replace(/"/gim, "")
+                    ?.trim(),
+                }))
+            )
+          );
+          window.localStorage.setItem(
+            "schoolObj",
+            JSON.stringify(data[0]?.school)
+          );
+          window.localStorage.setItem(
+            "payments_record",
+            JSON.stringify(data[0]?.payment_data)
+          );
+          window.localStorage.setItem(
+            "credits",
+            JSON.stringify(data[0]?.credits)
+          );
+          window.localStorage.setItem(
+            "students",
+            JSON.stringify(data[0]?.students)
+          );
+          window.localStorage.setItem(
+            "users_team",
+            JSON.stringify(data[0]?.users_data)
+          );
           setInput({
             school: "",
             email: "",
             password: "",
           });
           navigate("/app");
-        } else if (data.isAuthenticated === false) {
+        } else if (data?.auth?.isAuthenticated === false) {
           setStatus(false);
           dispatch(
             updateAlert([
@@ -108,7 +239,7 @@ const SignIn: FC<Props> = () => {
   //Automatically Log User If Aleady Signed In
   useEffect(() => {
     user?.isAuthenticated === true && navigate("/app");
-  }, [user,navigate]);
+  }, [user, navigate]);
 
   //Component ==============
   return (

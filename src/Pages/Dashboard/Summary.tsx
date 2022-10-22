@@ -1,35 +1,112 @@
-import {FC} from 'react'
+import { FC } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
 import { TbChartArcs3 } from "react-icons/tb";
 import { numberWithSpaces } from "../../Reusable Functions/Functions";
 
-type Props = {}
+type Props = {};
 
-const Summary:FC<Props> = () => {
+const Summary: FC<Props> = () => {
   const selectedCurrency = useSelector(
     (state: RootState) => state.SchoolSettings.selectedCurrency
+  );
+  const selectedTerm = useSelector(
+    (state: RootState) => state.SchoolSettings.selectedTerm
+  );
+  const students = useSelector((state: RootState) => state.SchoolData.students);
+  const payment_data = useSelector(
+    (state: RootState) => state.SchoolData.payments_record
+  );
+  const credits_data = useSelector(
+    (state: RootState) => state.SchoolData.credits_record
   );
 
   //Component
   return (
     <div className="col-span-1 rounded bg-white min-h-[22rem] h-[22rem] lg:h-full lg:row-span-1 border border-blue-200 overflow-hidden">
-      <div className="h-12 w-full bg-blue-200 flex items-center justify-between px-4 text-lg font-medium text-gray-600">
+      <div className="h-12 w-full bg-slate-100 flex items-center justify-between px-4 text-lg font-medium text-gray-600">
         <span>Summary</span>
         <TbChartArcs3 className="text-xl" />
       </div>
       <div className="w-full h-[calc(100%-3rem)] grid grid-rows-6 p-4 text-sm text-gray-700 font-medium">
         {[
-          { name: "Total Students", value: numberWithSpaces(4657) },
-          { name: "Paid Students", value: numberWithSpaces(1490) },
-          { name: "Owing Students", value: numberWithSpaces(3167) },
+          { name: "Total Students", value: numberWithSpaces(students?.length) },
+          {
+            name: "Paid Students",
+            value: numberWithSpaces(
+              Array.from(
+                new Set(
+                  payment_data
+                    ?.filter((data: any) =>
+                      selectedTerm?.some((term: any) =>
+                        term
+                          ?.replace(/\s|\(|\)/gi, "")
+                          ?.toLowerCase()
+                          ?.includes(
+                            data?.term_ref
+                              ?.replace(/\s|\(|\)/gi, "")
+                              ?.toLowerCase()
+                          )
+                      )
+                    )
+                    ?.map((data: any) => data?.student_name)
+                )
+              )?.length
+            ),
+          },
+          {
+            name: "Unpaid Students",
+            value: numberWithSpaces(
+              Array.from(
+                new Set(
+                  credits_data
+                    ?.filter((data: any) =>
+                      selectedTerm?.some((term: any) =>
+                        term
+                          ?.replace(/\s|\(|\)/gi, "")
+                          ?.toLowerCase()
+                          ?.includes(
+                            data?.term_ref
+                              ?.replace(/\s|\(|\)/gi, "")
+                              ?.toLowerCase()
+                          )
+                      )
+                    )
+                    ?.map((data: any) => data?.student_name)
+                )
+              )?.length
+            ),
+          },
           {
             name: "Paid Amount",
             value:
               selectedCurrency?.symbol +
               " " +
               numberWithSpaces(
-                selectedCurrency?.rate_multiplier * Number(20467)
+                (
+                  selectedCurrency?.rate_multiplier *
+                  Number(
+                    payment_data
+                      ?.filter((data: any) =>
+                        selectedTerm?.some((term: any) =>
+                          term
+                            ?.replace(/\s|\(|\)/gi, "")
+                            ?.toLowerCase()
+                            ?.includes(
+                              data?.term_ref
+                                ?.replace(/\s|\(|\)/gi, "")
+                                ?.toLowerCase()
+                            )
+                        )
+                      )
+                      ?.map((data: any) => data?.equivalent_amount_usd)
+                      ?.reduce(
+                        (accum: any, value: any) =>
+                          Number(accum) + Number(value),
+                        0
+                      )
+                  )
+                )?.toFixed(2)
               ),
           },
           {
@@ -38,7 +115,30 @@ const Summary:FC<Props> = () => {
               selectedCurrency?.symbol +
               " " +
               numberWithSpaces(
-                selectedCurrency?.rate_multiplier * Number(46780)
+                (
+                  selectedCurrency?.rate_multiplier *
+                  Number(
+                    credits_data
+                      ?.filter((data: any) =>
+                        selectedTerm?.some((term: any) =>
+                          term
+                            ?.replace(/\s|\(|\)/gi, "")
+                            ?.toLowerCase()
+                            ?.includes(
+                              data?.term_ref
+                                ?.replace(/\s|\(|\)/gi, "")
+                                ?.toLowerCase()
+                            )
+                        )
+                      )
+                      ?.map((data: any) => data?.credit_amount_usd)
+                      ?.reduce(
+                        (accum: any, value: any) =>
+                          Number(accum) + Number(value),
+                        0
+                      )
+                  )
+                )?.toFixed(2)
               ),
           },
           {
@@ -47,7 +147,47 @@ const Summary:FC<Props> = () => {
               selectedCurrency?.symbol +
               " " +
               numberWithSpaces(
-                selectedCurrency?.rate_multiplier * Number(67247)
+                Number(
+                  credits_data
+                    ?.filter((data: any) =>
+                      selectedTerm?.some((term: any) =>
+                        term
+                          ?.replace(/\s|\(|\)/gi, "")
+                          ?.toLowerCase()
+                          ?.includes(
+                            data?.term_ref
+                              ?.replace(/\s|\(|\)/gi, "")
+                              ?.toLowerCase()
+                          )
+                      )
+                    )
+                    ?.map((data: any) => data?.credit_amount_usd)
+                    ?.reduce(
+                      (accum: any, value: any) => Number(accum) + Number(value),
+                      0
+                    ) +
+                    Number(
+                      payment_data
+                        ?.filter((data: any) =>
+                          selectedTerm?.some((term: any) =>
+                            term
+                              ?.replace(/\s|\(|\)/gi, "")
+                              ?.toLowerCase()
+                              ?.includes(
+                                data?.term_ref
+                                  ?.replace(/\s|\(|\)/gi, "")
+                                  ?.toLowerCase()
+                              )
+                          )
+                        )
+                        ?.map((data: any) => data?.equivalent_amount_usd)
+                        ?.reduce(
+                          (accum: any, value: any) =>
+                            Number(accum) + Number(value),
+                          0
+                        )
+                    )
+                )?.toFixed(2)
               ),
           },
         ].map((item: any, index: number) => {
@@ -64,6 +204,6 @@ const Summary:FC<Props> = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Summary
+export default Summary;
