@@ -9,7 +9,7 @@ import {
   TbFriends,
 } from "react-icons/tb";
 import { selectCurrency } from ".././../Redux/Slices/SchoolSettingsSlice";
-import PaymentOptions from "../Payment/PaymentOptions";
+import PaymentOptions from "../../Components/Payment/PaymentOptions";
 import TermFilter from "./TermFilter";
 
 type Props = {};
@@ -28,7 +28,7 @@ const TopNav: FC<Props> = () => {
   //Component =====
   return (
     <>
-      <div className="w-full min-h-[3.5rem] h-14 bg-white flex items-center justify-between px-4">
+      <div className="w-full min-h-[3.5rem] h-14 bg-white border-b border-blue-200 flex items-center justify-between px-4">
         <div className="h-full flex items-center">
           <div className="h-8 w-8 lg:w-32 border border-gray-200 rounded-l px-2 pt-1">
             <select
@@ -59,7 +59,7 @@ const TopNav: FC<Props> = () => {
             <div className="bg-blue-600 hover:bg-blue-500 transition-all rounded-full px-4 pt-0.5 h-9 w-28 text-white text-base flex justify-center items-center select-none cursor-pointer">
               New
             </div>
-            <div className="absolute top-8 -left-16 pt-2 hidden group-hover:flex">
+            <div className="absolute top-8 -left-16 pt-2 hidden group-hover:flex z-[9999]">
               <div className="border border-blue-100 w-[13rem] h-[10rem] rounded-lg bg-white shadow-2xl drop-shadow-2xl grid grid-rows-3 p-4 text-sm textx-gray-600">
                 <button
                   onClick={() => setPayModal(true)}

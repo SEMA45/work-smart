@@ -1,7 +1,7 @@
 import { FC, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
-import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, Tooltip,ResponsiveContainer } from "recharts";
 
 type Props = {};
 
@@ -25,7 +25,7 @@ const GradesStatistics: FC<Props> = () => {
     )?.sort((a:number,b:number)=>a>b?1:-1);
     return gradeArray?.map((name: any) => ({
       name: name,
-      paid: Number(
+      Paid: Number(
         Array.from(
           new Set(
             payment_data
@@ -44,7 +44,7 @@ const GradesStatistics: FC<Props> = () => {
           )
         )?.length
       ),
-      unpaid: Number(
+      Unpaid: Number(
         Array.from(
           new Set(
             credits_data
@@ -72,10 +72,10 @@ const GradesStatistics: FC<Props> = () => {
       <div className="h-12 w-full bg-slate-100 flex items-center justify-between px-4 text-lg font-medium text-gray-600">
         <span>Grade Statitics</span>
       </div>
-      <div className="w-full h-[calc(100%-3rem)] p-4">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="w-full h-[calc(100%-3rem)] p-4 flex flex-col justify-end">
+        <ResponsiveContainer width="100%" height="80%">
           <BarChart
-            height={180}
+            height={200}
             data={chartData}
             margin={{
               top: 5,
@@ -100,13 +100,13 @@ const GradesStatistics: FC<Props> = () => {
             />
             <Tooltip cursor={false} />
             <Bar
-              dataKey="paid"
+              dataKey="Paid"
               fill="#2563eb"
               background={{ fill: "#e2e8f0", radius: 20 }}
               radius={20}
             />
             <Bar
-              dataKey="unpaid"
+              dataKey="Unpaid"
               fill="#60a5fa"
               radius={20}
               background={{ fill: "#e2e8f0", radius: 20 }}

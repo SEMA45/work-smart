@@ -31,23 +31,23 @@ const RecentActivities: FC<Props> = ({ setPreview }) => {
       ?.sort(
         (a: any, b: any) => Number(b.payment_date) - Number(a.payment_date)
       )
-      ?.slice(0, 6)
+      ?.slice(0, 5)
       ?.map((payment: any) => {
         return (
-          <tr
+          <div
             key={payment?.payment_id}
-            className={`min-h-[3.5rem] h-[16%] w-full bg-white hover:opacity-80 hover:bg-slate-100 border-t text-xs capitalize text-slate-600 overflow-hidden tracking-wider border-b dark:border-gray-800 snap_childTwo relative`}
+            className={`min-h-[3rem] w-full bg-white hover:opacity-80 hover:bg-slate-100 border-t text-xs capitalize text-slate-600 overflow-hidden tracking-wider border-b snap_childTwo relative grid grid-cols-5 px-2`}
           >
-            <td className="text-left space-x-4 p-1 pl-4 border-l dark:border-gray-800">
+            <div className="text-left space-x-4 p-1 flex items-center h-full col-span-1">
               <span>{payment?.student_name}</span>
-            </td>
-            <td className="text-left space-x-4 p-1 pl-4 border-l dark:border-gray-800">
+            </div>
+            <div className="text-left space-x-4 p-1 flex items-center h-full col-span-1">
               <span>{payment?.grade}</span>
-            </td>
-            <td className="text-left space-x-4 p-1 pl-4 border-l dark:border-gray-800">
+            </div>
+            <div className="text-left space-x-4 p-1 flex items-center h-full col-span-1">
               <span>{new Date(payment?.payment_date).toDateString()}</span>
-            </td>
-            <td className="text-left space-x-4 p-1 pl-4 border-l dark:border-gray-800">
+            </div>
+            <div className="text-left space-x-4 p-1 flex items-center h-full col-span-1">
               <span>
                 {selectedCurrency?.symbol}&nbsp;
                 {numberWithSpaces(
@@ -57,52 +57,53 @@ const RecentActivities: FC<Props> = ({ setPreview }) => {
                   ).toFixed(2)
                 )}
               </span>
-            </td>
-            <td className="text-left space-x-4 p-1 pl-4 border-l dark:border-gray-800">
+            </div>
+            <div className="text-left space-x-4 p-1 flex items-center h-full col-span-1">
               <span>{payment?.payment_method}</span>
-            </td>
+            </div>
             {/**Print Or View Statement */}
             <button
               onClick={() => {
+                window.localStorage.setItem('paymentInvoiceData',JSON.stringify(payment))
                 setPreview(true);
               }}
               className="absolute right-4 top-2.5 h-6 px-3 bg-blue-200 text-slate-800 rounded-full"
             >
               view
             </button>
-          </tr>
+          </div>
         );
       });
 
   //componet ==========
   return (
-    <div className="h-[22rem] lg:h-full min-h-[22rem] lg:row-span-1 col-span-1 md:col-span-2 lg:col-span-3 bg-white border border-blue-200 rounded overflow-hidden">
+    <div className="h-fit lg:h-full min-h-[22rem] lg:row-span-1 col-span-1 md:col-span-2 lg:col-span-3 bg-white border border-blue-200 rounded overflow-hidden">
       {" "}
       <div className="h-12 w-full bg-nherit flex items-center justify-between px-4 text-lg font-medium text-gray-600">
         <span>Recent Payments</span>
       </div>
-      <table className="w-full h-[calc(100%-3rem)] p-4 overflow-hidden overflow-y-scroll">
-        <thead className="sticky top-0 h-fit w-full rounded-lg bg-slate-100 dark:bg-[#2626266c] z-[9]">
-          <tr className="h-14 w-full text-xs leading-none text-slate-700 uppercase font-bold tracking-wider">
-            <th className="font-bold text-left space-x-4 p-1 pl-4 border-l dark:border-gray-800">
+      <div className="w-full h-[calc(100%-3rem)] overflow-hidden overflow-y-scroll">
+        <div className="sticky top-0 h-fit w-full bg-slate-100 z-[9]">
+          <div className="h-14 w-full text-xs leading-none text-slate-700 uppercase font-bold tracking-wider grid grid-cols-5 px-2">
+            <div className="font-bold text-left space-x-4 p-1 h-full col-span-1 flex items-center">
               <span>Student Name</span>
-            </th>
-            <th className="font-bold text-left space-x-4 p-1 pl-4 border-l dark:border-gray-800">
+            </div>
+            <div className="font-bold text-left space-x-4 p-1 h-full col-span-1 flex items-center">
               <span>Student Grade</span>
-            </th>
-            <th className="font-bold text-left space-x-4 p-1 pl-4 border-l dark:border-gray-800">
+            </div>
+            <div className="font-bold text-left space-x-4 p-1 h-full col-span-1 flex items-center">
               <span>Payment Date</span>
-            </th>
-            <th className="font-bold text-left space-x-4 p-1 pl-4 border-l dark:border-gray-800">
+            </div>
+            <div className="font-bold text-left space-x-4 p-1 h-full col-span-1 flex items-center">
               <span>Payment Amount</span>
-            </th>
-            <th className="font-bold text-left space-x-4 p-1 pl-4 border-l dark:border-gray-800">
+            </div>
+            <div className="font-bold text-left space-x-4 p-1 h-full col-span-1 flex items-center">
               <span>Payment Method</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody className="w-full h-[calc(100%-3.5rem)] px-1">{list}</tbody>
-      </table>
+            </div>
+          </div>
+        </div>
+        <div role="table" className="w-full h-fit">{list}</div>
+      </div>
     </div>
   );
 };

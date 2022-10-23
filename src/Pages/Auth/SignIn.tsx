@@ -61,7 +61,7 @@ const SignIn: FC<Props> = () => {
     e.preventDefault();
     setStatus(true);
     fetch(
-      `https://script.google.com/macros/s/AKfycbw0I-xRvrHTdVWOi8naWjXzMPVwxe6F92qOjubeEjrtfpZ2AeY1oTAGJ_u23-3E5S6WOA/exec?action=signin&email=${
+      `https://script.google.com/macros/s/AKfycbwjtNzbj6EiVcuoeUlwlFr36rG031WFcueUAOQcIn69ErRY3exWaLg9zwxyKkF2lW_bIQ/exec?action=signin&email=${
         input.email
       }&password=${crypt(input.email, input.password)}&school=${input.school}`
     )

@@ -13,15 +13,15 @@ const Dashboard: FC<Props> = () => {
   return (
     <>
       <div
-        className={`w-full h-fit min-h-[100%] overflow-hidden overflow-y-scroll bg-blue-100 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-4 p-4`}
+        className={`w-full h-fit min-h-[100%] overflow-hidden overflow-y-scroll bg-blue-100 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-4 p-4 relative`}
       >
         <Summary />
         <GradesStatistics />
         <RecentActivities setPreview={setPreview} />
-      </div>
 
       {/**Preview and Pdfownload | Print */}
       <PreviewPrint showPreview={showPreview} setPreview={setPreview} />
+      </div>
     </>
   );
 };

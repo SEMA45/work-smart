@@ -47,7 +47,7 @@ const SideNav: FC<Props> = () => {
             alt="logo"
             className="w-10 object-center lg:hidden flex"
           />
-          <div className="bg-blue-400 px-2 py-0.5 pt-1 rounded-full border border-blue-500 text-[0.65rem] text-blue-700 hidden lg:flex items-center justify-center">
+          <div className="bg-blue-200 px-2 py-0.5 pt-1 rounded-full border border-blue-500 text-[0.65rem] text-blue-700 hidden lg:flex items-center justify-center">
             V.{packageJson.version}
           </div>
         </div>
@@ -165,7 +165,7 @@ const SideNav: FC<Props> = () => {
           onClick={() => {
             setSigningOut(true);
             fetch(
-              `https://script.google.com/macros/s/AKfycbw0I-xRvrHTdVWOi8naWjXzMPVwxe6F92qOjubeEjrtfpZ2AeY1oTAGJ_u23-3E5S6WOA/exec?action=signout&email=${user?.email}&uid=${user?.uid}`
+              `https://script.google.com/macros/s/AKfycbwjtNzbj6EiVcuoeUlwlFr36rG031WFcueUAOQcIn69ErRY3exWaLg9zwxyKkF2lW_bIQ/exec?action=signout&email=${user?.email}&uid=${user?.uid}`
             )
               .then((res) => res.json())
               .then((data) => {

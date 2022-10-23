@@ -1,10 +1,12 @@
-import { FC, useRef, useState } from "react";
+import { FC, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../Redux/store";
 import { updateAlert } from "../../Redux/Slices/NotificationsSlice";
 import {
-  updatePayments_Data,updateCredits_Data
+  updatePayments_Data,
+  updateCredits_Data,
 } from "../../Redux/Slices/School_DataSlice";
+import useOnClickOutside from "../../Custom-Hooks/useOnClickOutsideRef"
 
 type Props = {
   paymentModal: any;
@@ -14,12 +16,8 @@ type Props = {
 const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const user = useSelector((state: RootState) => state.UserInfo.user);
-  const students = useSelector((state: RootState) => state.SchoolData.students);
   const currencies = useSelector(
     (state: RootState) => state.SchoolSettings.currencies
-  );
-  const periods = useSelector(
-    (state: RootState) => state.SchoolSettings.periods_terms
   );
   const dispatch: AppDispatch = useDispatch();
   const alerts = useSelector(
@@ -28,7 +26,7 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [payment_obj, setPaymentObj] = useState({
     student_id: "",
-    student_name: "",
+    student_name: "Student test",
     school_id: "",
     grade: "",
     payment_date: "",
@@ -41,6 +39,33 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
     payment_id: "",
     admin_email: "",
   });
+  const credits_data = useSelector(
+    (state: RootState) => state.SchoolData.credits_record
+  );
+  const [search, searchValue] = useState("");
+  const [ showCredits, setCredits] = useState<Boolean>(false)
+  const searchResults = useMemo(() => {
+    return credits_data?.filter(
+      (data: any) =>
+        data?.student_name
+          ?.toLowerCase()
+          ?.replace(/\s/gim, "")
+          ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
+        data?.term_ref
+          ?.toLowerCase()
+          ?.replace(/\s/gim, "")
+          ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
+        data?.type
+          ?.toLowerCase()
+          ?.replace(/\s/gim, "")
+          ?.includes(search?.toLowerCase()?.replace(/\s/gim, ""))
+    )?.slice(0,5);
+  }, [credits_data, search]);
+
+  //Close search modal on click utside
+  const studentsRef = useOnClickOutside(()=>{
+    setCredits(false)
+  })
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -68,11 +93,13 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
     };
 
     if (
-      payment_obj?.payment_method === "cash" ||
-      payment_obj?.payment_method === "other"
+      (payment_obj?.payment_method === "cash" &&
+        payment_obj?.student_name?.length >= 1) ||
+      (payment_obj?.payment_method === "other" &&
+        payment_obj?.student_name?.length >= 1)
     ) {
       fetch(
-        `https://script.google.com/macros/s/AKfycbw0I-xRvrHTdVWOi8naWjXzMPVwxe6F92qOjubeEjrtfpZ2AeY1oTAGJ_u23-3E5S6WOA/exec?action=add_payment&schoolID=${
+        `https://script.google.com/macros/s/AKfycbwjtNzbj6EiVcuoeUlwlFr36rG031WFcueUAOQcIn69ErRY3exWaLg9zwxyKkF2lW_bIQ/exec?action=add_payment&schoolID=${
           user?.school_id
         }&${JSON.stringify({
           ...payment_obj,
@@ -133,12 +160,12 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
             ])
           );
         });
-    }else{
+    } else {
       dispatch(
         updateAlert([
           ...alerts,
           {
-            message: "Payment Option is not available yet",
+            message: "Make sure all fields are filled properly",
             color: "bg-red-200",
             id: new Date().getTime(),
           },
@@ -151,25 +178,25 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
   //companent
   return (
     <div
-      className={`w-screen h-screen bg-slate-900/40 fixed  left-0 right-0 top-0 bottom-0 z-[99999] flex justify-center items-center overflow-hidden no-scrollbar no-scrollbar::-webkit-scrollbar ${
-        paymentModal ? "" : "hidden"
-      }`}
+      className={`w-screen h-screen bg-slate-900/40 fixed left-0 right-0 top-0 bottom-0 z-[99999]
+       p-6 pt-14 flex justify-center overflow-hidden overflow-y-scroll no-scrollbar no-scrollbar::-webkit-scrollbar ${
+         paymentModal ? "" : "hidden"
+       }`}
     >
+      {/**Close Modal ========== */}
+      <button
+        disabled={loading}
+        onClick={() => setPayModal(false)}
+        type="button"
+        className="h-6 w-6 absolute top-3 right-3 rounded-sm bg-red-600 text-white text-sm"
+      >
+        &times;
+      </button>
       <form
         ref={formRef}
         onSubmit={(e) => handleSubmit(e)}
-        className="bg-white w-[35rem] min-h-[25rem] rounded-lg p-6 space-y-4 relative"
+        className="bg-white w-[35rem] min-h-[25rem] h-fit rounded p-6 space-y-4 relative"
       >
-        {/**Close Modal ========== */}
-        <button
-          disabled={loading}
-          onClick={() => setPayModal(false)}
-          type="button"
-          className="h-6 w-6 absolute -top-3 -right-3 rounded-sm bg-red-600 text-white text-sm"
-        >
-          &times;
-        </button>
-
         {/**Payment Method ========== */}
         <fieldset className="w-full h-20 rounded border border-slate-300 p-2 pt-0">
           <legend className="p-1 text-slate-500">Payment Option</legend>
@@ -191,6 +218,91 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
             <option value="eco cash">eco cash</option>
             <option value="other">other</option>
           </select>
+        </fieldset>
+
+        {/**Student Details ========== */}
+        <fieldset className="w-full h-20 rounded border border-slate-300 p-2 pt-0 relative">
+          <legend className="p-1 text-slate-500">Student</legend>
+          <div className="w-full h-10 flex items-center overflow-hidden">
+            <input
+              onFocus={() => {
+                setCredits(true);
+              }}
+              onBlur={() => {
+                setCredits(true);
+              }}
+              type="search"
+              className={`w-full h-full outline-none focus:border-0 focus:ring-0 ${
+                payment_obj?.student_name?.length >= 1 && "hidden"
+              }`}
+              placeholder="Search for an Invoice"
+              value={search}
+              onChange={(e) => {
+                searchValue(e.target.value);
+              }}
+            />
+            {!showCredits && payment_obj?.student_name?.length >= 1 && (
+              <div className="bg-blue-100 border border-slate-100 rounded-full flex justify-between items-center h-7 text-xs text-slate-600 px-2 p-1 space-x-2">
+                <span className="h-full pt-0.5">
+                  {payment_obj?.student_name}
+                </span>
+                <button
+                  onClick={() => {
+                    setPaymentObj((prev: any) => ({
+                      ...prev,
+                      student_id: "",
+                      student_name: "",
+                      school_id: "",
+                      grade: "",
+                    }));
+                    setCredits(true);
+                  }}
+                  type="button"
+                  className="h-full flex justify-center items-center px-2 border-l border-slate-400 text-lg text-red-600"
+                >
+                  &times;
+                </button>
+              </div>
+            )}
+          </div>
+          {showCredits && searchResults?.length >= 1 && (
+            <div
+              ref={studentsRef}
+              className="absolute top-14 left-0 z-[9999] drop-shadow-xl shadow-xl w-full min-h-[3rem] bg-slate-200 rounded-sm border border-slate-300 p-2 space-y-2"
+            >
+              {searchResults?.map((data: any) => {
+                return (
+                  <div
+                    onClick={() => {
+                      setPaymentObj((prev: any) => ({
+                        ...prev,
+                        student_id: data?.student_id,
+                        student_name: data?.student_name,
+                        school_id: data?.school_id,
+                        grade: data?.grade,
+                        type: data?.type,
+                        term_ref: data?.term_ref,
+                      }));
+                      searchValue("");
+                      setCredits(false);
+                    }}
+                    key={data?.student_id}
+                    className="w-full h-fit rounded-sm border border-slate-50 p-2 text-slate-600 text-sm cursor-pointer bg-slate-100"
+                  >
+                    <span>{data?.student_name}</span>
+                    <div className="flex justify-between items-center text-xs text-slate-500">
+                      <span className="w-[50%] overflow-hidden">
+                        {data?.term_ref}
+                      </span>
+                      <span className="w-[50%] overflow-hidden text-right">
+                        $ {data?.credit_amount_usd}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </fieldset>
 
         {/**Payment Amount ========== */}
@@ -235,72 +347,6 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
           </div>
         </fieldset>
 
-        {/**Student Details ========== */}
-        <fieldset className="w-full h-20 rounded border border-slate-300 p-2 pt-0">
-          <legend className="p-1 text-slate-500">Student Name</legend>
-          <select
-            onChange={(e) => {
-              setPaymentObj((prev: any) => ({
-                ...prev,
-                student_id: JSON.parse(e.target.value)?.student_id,
-                student_name: JSON.parse(e.target.value)?.student_name,
-                school_id: JSON.parse(e.target.value)?.school_id,
-                grade: JSON.parse(e.target.value)?.grade,
-              }));
-            }}
-            required
-            name="payment_time"
-            id="payment_time"
-            className="w-full h-10 rounded focus:border-0 focus:ring-0 focus:outline-none capitalize text-slate-700"
-          >
-            <option
-              value={JSON.stringify({
-                student_id: "",
-                student_name: "",
-                school_id: "",
-                grade: "",
-              })}
-            >
-              Student Name
-            </option>
-            {students?.map((student: any) => {
-              return (
-                <option
-                  key={student?.student_id}
-                  value={JSON.stringify(student)}
-                >
-                  {student?.student_name}
-                </option>
-              );
-            })}
-          </select>
-        </fieldset>
-
-        {/**Period Ref ========== */}
-        <fieldset className="w-full h-20 rounded border border-slate-300 p-2 pt-0">
-          <legend className="p-1 text-slate-500">Period</legend>
-          <select
-            onChange={(e) => {
-              setPaymentObj((prev: any) => ({
-                ...prev,
-                term_ref: JSON.parse(e.target.value)?.name,
-              }));
-            }}
-            required
-            name="payment_time"
-            id="payment_time"
-            className="w-full h-10 rounded focus:border-0 focus:ring-0 focus:outline-none capitalize text-slate-700"
-          >
-            {periods?.map((period: any) => {
-              return (
-                <option key={period.name} value={JSON.stringify(period)}>
-                  {period.name}
-                </option>
-              );
-            })}
-          </select>
-        </fieldset>
-
         {/**Payment Date ========== */}
         <fieldset className="w-full h-20 rounded border border-slate-300 p-2 pt-0">
           <legend className="p-1 text-slate-500">Payment Date</legend>
@@ -308,7 +354,9 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
             onChange={(e) => {
               setPaymentObj((prev: any) => ({
                 ...prev,
-                payment_date: new Date(e.target.value?e.target.value:"").getTime(),
+                payment_date: new Date(
+                  e.target.value ? e.target.value : ""
+                ).getTime(),
               }));
             }}
             required

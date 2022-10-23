@@ -32,7 +32,7 @@ const Summary: FC<Props> = () => {
         {[
           { name: "Total Students", value: numberWithSpaces(students?.length) },
           {
-            name: "Paid Students",
+            name: "Paid Invoices",
             value: numberWithSpaces(
               Array.from(
                 new Set(
@@ -55,7 +55,7 @@ const Summary: FC<Props> = () => {
             ),
           },
           {
-            name: "Unpaid Students",
+            name: "Unpaid Invoices",
             value: numberWithSpaces(
               Array.from(
                 new Set(
