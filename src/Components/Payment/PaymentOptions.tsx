@@ -26,7 +26,7 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [payment_obj, setPaymentObj] = useState({
     student_id: "",
-    student_name: "Student test",
+    student_name: "",
     school_id: "",
     grade: "",
     payment_date: "",

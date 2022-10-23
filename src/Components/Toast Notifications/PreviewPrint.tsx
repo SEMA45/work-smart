@@ -1,5 +1,5 @@
 import { FC, useMemo } from "react";
-import { TbX, TbPrinter, TbDownload } from "react-icons/tb";
+import { TbX, TbPrinter} from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
 import { numberWithSpaces } from "../../Reusable Functions/Functions";
@@ -20,7 +20,7 @@ const PreviewPrint: FC<Props> = ({ showPreview, setPreview }) => {
     let obj = window.localStorage.getItem("paymentInvoiceData");
     return showPreview && obj ? JSON.parse(obj) : {};
   }, [showPreview]);
-  console.log(school_obj);
+  
   //Component
   return (
     <div

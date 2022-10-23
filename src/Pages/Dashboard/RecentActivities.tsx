@@ -102,7 +102,7 @@ const RecentActivities: FC<Props> = ({ setPreview }) => {
             </div>
           </div>
         </div>
-        <div role="table" className="w-full h-fit">{list}</div>
+        {payment_data?.length>=1?<div role="table" className="w-full h-fit">{list}</div>:<><p className="text-slate-400 text-lg font-semibold text-center mt-14">There are no  recent payments</p></>}
       </div>
     </div>
   );
