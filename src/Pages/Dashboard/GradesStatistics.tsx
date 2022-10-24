@@ -1,11 +1,19 @@
 import { FC, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
-import { BarChart, Bar, XAxis, Tooltip,ResponsiveContainer } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 type Props = {};
 
 const GradesStatistics: FC<Props> = () => {
+  const user = useSelector((state: RootState) => state.UserInfo.user);
   const selectedTerm = useSelector(
     (state: RootState) => state.SchoolSettings.selectedTerm
   );
@@ -17,12 +25,18 @@ const GradesStatistics: FC<Props> = () => {
   );
 
   const chartData = useMemo(() => {
-    let gradeArray = Array.from(
-      new Set([
-        ...payment_data?.map((data: any) => data?.grade),
-        ...credits_data?.map((data: any) => data?.grade),
-      ])
-    )?.sort((a:number,b:number)=>a>b?1:-1);
+    let gradeArray =
+      user?.school_type?.toLowerCase() === "primary school"
+        ? ["ECD", 1, 2, 3, 4, 6, 7]?.sort((a: any, b: any) => (a > b ? 1 : -1))
+        : user?.school_type?.toLowerCase() === "secondary school"
+        ? ["Form 1", "Form 2", "Form 3", "Form 4"]?.sort((a: any, b: any) =>
+            a > b ? 1 : -1
+          )
+        : user?.school_type?.toLowerCase() === "high school"
+        ? ["Form 1", "Form 2", "Form 3", "Form 4", "Form 5", "Form 6"]?.sort(
+            (a: any, b: any) => (a > b ? 1 : -1)
+          )
+        : [];
     return gradeArray?.map((name: any) => ({
       name: name,
       Paid: Number(
@@ -64,7 +78,7 @@ const GradesStatistics: FC<Props> = () => {
         )?.length
       ),
     }));
-  }, [credits_data, payment_data, selectedTerm]);
+  }, [credits_data, payment_data, selectedTerm, user]);
 
   //Component ===========
   return (
@@ -89,7 +103,7 @@ const GradesStatistics: FC<Props> = () => {
             <XAxis
               dataKey="name"
               axisLine={false}
-              tickLine={false}
+              tickLine={true}
               tickMargin={5}
               style={{
                 fontSize: "0.7rem",
@@ -98,6 +112,7 @@ const GradesStatistics: FC<Props> = () => {
                 fill: "#334155",
               }}
             />
+            <YAxis />
             <Tooltip cursor={false} />
             <Bar
               dataKey="Paid"

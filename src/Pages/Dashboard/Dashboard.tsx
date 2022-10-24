@@ -1,5 +1,5 @@
 import { FC,useState } from "react";
-import PreviewPrint from "../../Components/Toast Notifications/PreviewPrint";
+import PreviewPrint from "../../Components/Payment/PreviewPrint";
 import GradesStatistics from "./GradesStatistics";
 import RecentActivities from "./RecentActivities";
 import Summary from "./Summary";

@@ -24,7 +24,7 @@ const PreviewPrint: FC<Props> = ({ showPreview, setPreview }) => {
   //Component
   return (
     <div
-      className={`bg-blue-900/70 print:bg-white w-screen h-screen fixed z-[9999] top-0 left-0 bottom-0 right-0 ${
+      className={`bg-blue-900/70 print:bg-white fixed z-[9999] -top-6 left-0 bottom-0 right-0 ${
         showPreview ? "flex" : "hidden"
       } justify-center p-12 overflow-hidden overflow-y-scroll no-scrollbar`}
     >
@@ -52,18 +52,18 @@ const PreviewPrint: FC<Props> = ({ showPreview, setPreview }) => {
         </div>
         <div className="mt-4 flex justify-between text-sm font-medium text-slate-700 py-2 border-y border-slate-200">
           <ul className="max-w-[48%] overflow-hidden">
-            <li>
+            {payment_object?.equivalent_amount_usd&&<li>
               Payment ID :{" "}
               <span className="text-slate-500">
                 {payment_object?.payment_id}
               </span>
-            </li>
-            <li>
+            </li>}
+           {payment_object?.equivalent_amount_usd&& <li>
               Payment Date :{" "}
               <span className="text-slate-500">
                 {new Date(payment_object?.payment_date).toDateString()}
               </span>
-            </li>
+            </li>}
             <li>
               Student ID :{" "}
               <span className="text-slate-500">
@@ -76,12 +76,12 @@ const PreviewPrint: FC<Props> = ({ showPreview, setPreview }) => {
                 {payment_object?.student_name}
               </span>
             </li>
-            <li>
+            {payment_object?.equivalent_amount_usd&&<li>
               Clerk's email :{" "}
               <span className="text-slate-500">
                 {payment_object?.admin_email}
               </span>
-            </li>
+            </li>}
           </ul>
           <ul className="max-w-[48%] overflow-hidden text-right h-full">
             <li className="whitespace-nowrap overflow-hidden overflow-ellipsis">
@@ -122,7 +122,10 @@ const PreviewPrint: FC<Props> = ({ showPreview, setPreview }) => {
                 {numberWithSpaces(
                   (
                     selectedCurrency?.rate_multiplier *
-                    Number(payment_object?.equivalent_amount_usd)
+                    Number(
+                      payment_object?.equivalent_amount_usd ??
+                        payment_object?.credit_amount_usd
+                    )
                   ).toFixed(2)
                 )}
               </td>
@@ -138,7 +141,10 @@ const PreviewPrint: FC<Props> = ({ showPreview, setPreview }) => {
                 {numberWithSpaces(
                   (
                     selectedCurrency?.rate_multiplier *
-                    Number(payment_object?.equivalent_amount_usd)
+                    Number(
+                      payment_object?.equivalent_amount_usd ??
+                        payment_object?.credit_amount_usd
+                    )
                   ).toFixed(2)
                 )}
               </td>

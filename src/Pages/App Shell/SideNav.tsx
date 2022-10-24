@@ -90,15 +90,15 @@ const SideNav: FC<Props> = () => {
             <span className="mt-1 hidden lg:flex">Balance Sheet</span>
           </NavLink>
           <NavLink
-            to=""
+            to="/app/overall-report"
             className={`h-10 w-full flex items-center space-x-2 px-4 text-sm text-white ${
-              location.pathname === "/overal-report"
+              location.pathname === "/app/overall-report"
                 ? "border-l-4 border-white bg-white/20"
                 : "border-l-4 border-transparent"
             }`}
           >
             <TbChartDonut className="text-lg" />
-            <span className="mt-1 hidden lg:flex">Overal Report</span>
+            <span className="mt-1 hidden lg:flex">Overall Report</span>
           </NavLink>
           <NavLink
             to=""
@@ -165,7 +165,7 @@ const SideNav: FC<Props> = () => {
           onClick={() => {
             setSigningOut(true);
             fetch(
-              `https://script.google.com/macros/s/AKfycbwjtNzbj6EiVcuoeUlwlFr36rG031WFcueUAOQcIn69ErRY3exWaLg9zwxyKkF2lW_bIQ/exec?action=signout&email=${user?.email}&uid=${user?.uid}`
+              `https://script.google.com/macros/s/AKfycbzXHls5in39Y_GmlGSUhxMI_VmHvklhFVXyB72A6TkhQOzoRxjboNtZMQYGmuDQGcSTaA/exec?action=signout&email=${user?.email}&uid=${user?.uid}`
             )
               .then((res) => res.json())
               .then((data) => {

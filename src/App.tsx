@@ -5,6 +5,7 @@ import Landing from "./Pages/Landing/Landing";
 import AppShell from "./Pages/App Shell/AppShell";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import BalanceSheet from "./Pages/Balance Sheet/BalanceSheet";
+import OverallReport from "./Pages/Overall Report/OverallReport";
 
 const App: FC = () => {
   return (
@@ -24,6 +25,7 @@ const App: FC = () => {
             <Route path="/app" element={<AppShell />}>
               <Route path="" element={<Dashboard />} />
               <Route path="balance_sheet" element={<BalanceSheet />} />
+              <Route path="overall-report" element={<OverallReport />} />
             </Route>
           </Routes>
         </Suspense>

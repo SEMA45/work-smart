@@ -99,7 +99,7 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
         payment_obj?.student_name?.length >= 1)
     ) {
       fetch(
-        `https://script.google.com/macros/s/AKfycbwjtNzbj6EiVcuoeUlwlFr36rG031WFcueUAOQcIn69ErRY3exWaLg9zwxyKkF2lW_bIQ/exec?action=add_payment&schoolID=${
+        `https://script.google.com/macros/s/AKfycbzXHls5in39Y_GmlGSUhxMI_VmHvklhFVXyB72A6TkhQOzoRxjboNtZMQYGmuDQGcSTaA/exec?action=add_payment&schoolID=${
           user?.school_id
         }&${JSON.stringify({
           ...payment_obj,
@@ -124,7 +124,6 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
         .then((res) => res.json())
         .then((data: any) => {
           clear();
-          console.log(data);
           dispatch(
             updateAlert([
               ...alerts,
@@ -242,8 +241,8 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
               }}
             />
             {!showCredits && payment_obj?.student_name?.length >= 1 && (
-              <div className="bg-blue-100 border border-slate-100 rounded-full flex justify-between items-center h-7 text-xs text-slate-600 px-2 p-1 space-x-2">
-                <span className="h-full pt-0.5">
+              <div className="bg-blue-100 border border-slate-300 rounded-full flex justify-between items-center h-7 text-xs text-slate-600 px-2 p-1 space-x-2">
+                <span className="h-full pt-0.5 px-2">
                   {payment_obj?.student_name}
                 </span>
                 <button
