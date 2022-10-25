@@ -9,6 +9,7 @@ import {
   updateCredits_Data,
 } from "../../Redux/Slices/School_DataSlice";
 import PreviewPrint from "../../Components/Payment/PreviewPrint";
+import ActionPanel from "../../Components/Misc/ActionPanel";
 
 type Props = {};
 
@@ -29,6 +30,7 @@ const BalanceSheet: FC<Props> = () => {
   const [selectedArray, setSelected] = useState<any>([]);
   const [actionLoading, setAction] = useState<boolean>(false);
   const [showPreview, setPreview] = useState<boolean>(false);
+  const [openPanel, setActionPanel] = useState<boolean>(false);
   const payment_data = useSelector(
     (state: RootState) => state.SchoolData.payments_record
   )
@@ -268,6 +270,94 @@ const BalanceSheet: FC<Props> = () => {
         );
       });
 
+  //Delete credit
+  const delete_credit = () => {
+    setAction(true);
+    fetch(
+      `https://script.google.com/macros/s/AKfycbzXHls5in39Y_GmlGSUhxMI_VmHvklhFVXyB72A6TkhQOzoRxjboNtZMQYGmuDQGcSTaA/exec?action=delete_credit&schoolID=${
+        user?.school_id
+      }&data=${selectedArray?.toString()}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setSelected([]);
+        dispatch(updatePayments_Data(data[0]?.payment_data));
+        dispatch(updateCredits_Data(data[0]?.credits));
+        setAction(false);
+        dispatch(
+          updateAlert([
+            ...alerts,
+            {
+              message: "Credit(s) deleted successfully",
+              color: "bg-green-200",
+              id: new Date().getTime(),
+            },
+          ])
+        );
+      })
+      .catch(() => {
+        setAction(false);
+        dispatch(
+          updateAlert([
+            ...alerts,
+            {
+              message: "Failed to delete please retry",
+              color: "bg-red-200",
+              id: new Date().getTime(),
+            },
+          ])
+        );
+      });
+  };
+
+  //Delete payment
+  const delete_payment = () => {
+    setAction(true);
+    fetch(
+      `https://script.google.com/macros/s/AKfycbzXHls5in39Y_GmlGSUhxMI_VmHvklhFVXyB72A6TkhQOzoRxjboNtZMQYGmuDQGcSTaA/exec?action=delete_payment&schoolID=${
+        user?.school_id
+      }&data=${selectedArray?.toString()}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setSelected([]);
+        dispatch(updatePayments_Data(data[0]?.payment_data));
+        dispatch(updateCredits_Data(data[0]?.credits));
+        window.localStorage.setItem(
+          "payments_record",
+          JSON.stringify(data[0]?.payment_data)
+        );
+        window.localStorage.setItem(
+          "credits",
+          JSON.stringify(data[0]?.credits)
+        );
+        setAction(false);
+        dispatch(
+          updateAlert([
+            ...alerts,
+            {
+              message: "Credit(s) deleted successfully",
+              color: "bg-green-200",
+              id: new Date().getTime(),
+            },
+          ])
+        );
+      })
+      .catch(() => {
+        setAction(false);
+        dispatch(
+          updateAlert([
+            ...alerts,
+            {
+              message: "Failed to delete please retry",
+              color: "bg-red-200",
+              id: new Date().getTime(),
+            },
+          ])
+        );
+      });
+  };
+
   //components
   return (
     <div
@@ -328,89 +418,7 @@ const BalanceSheet: FC<Props> = () => {
             <button
               onClick={() => {
                 if (selectedArray?.length >= 1) {
-                  if (tab === "debt") {
-                    setAction(true);
-                    fetch(
-                      `https://script.google.com/macros/s/AKfycbzXHls5in39Y_GmlGSUhxMI_VmHvklhFVXyB72A6TkhQOzoRxjboNtZMQYGmuDQGcSTaA/exec?action=delete_credit&schoolID=${
-                        user?.school_id
-                      }&data=${selectedArray?.toString()}`
-                    )
-                      .then((res) => res.json())
-                      .then((data) => {
-                        setSelected([]);
-                        dispatch(updatePayments_Data(data[0]?.payment_data));
-                        dispatch(updateCredits_Data(data[0]?.credits));
-                        setAction(false);
-                        dispatch(
-                          updateAlert([
-                            ...alerts,
-                            {
-                              message: "Credit(s) deleted successfully",
-                              color: "bg-green-200",
-                              id: new Date().getTime(),
-                            },
-                          ])
-                        );
-                      })
-                      .catch(() => {
-                        setAction(false);
-                        dispatch(
-                          updateAlert([
-                            ...alerts,
-                            {
-                              message: "Failed to delete please retry",
-                              color: "bg-red-200",
-                              id: new Date().getTime(),
-                            },
-                          ])
-                        );
-                      });
-                  } else if (tab === "payments") {
-                    setAction(true);
-                    fetch(
-                      `https://script.google.com/macros/s/AKfycbzXHls5in39Y_GmlGSUhxMI_VmHvklhFVXyB72A6TkhQOzoRxjboNtZMQYGmuDQGcSTaA/exec?action=delete_payment&schoolID=${
-                        user?.school_id
-                      }&data=${selectedArray?.toString()}`
-                    )
-                      .then((res) => res.json())
-                      .then((data) => {
-                        setSelected([]);
-                        dispatch(updatePayments_Data(data[0]?.payment_data));
-                        dispatch(updateCredits_Data(data[0]?.credits));
-                        window.localStorage.setItem(
-                          "payments_record",
-                          JSON.stringify(data[0]?.payment_data)
-                        );
-                        window.localStorage.setItem(
-                          "credits",
-                          JSON.stringify(data[0]?.credits)
-                        );
-                        setAction(false);
-                        dispatch(
-                          updateAlert([
-                            ...alerts,
-                            {
-                              message: "Credit(s) deleted successfully",
-                              color: "bg-green-200",
-                              id: new Date().getTime(),
-                            },
-                          ])
-                        );
-                      })
-                      .catch(() => {
-                        setAction(false);
-                        dispatch(
-                          updateAlert([
-                            ...alerts,
-                            {
-                              message: "Failed to delete please retry",
-                              color: "bg-red-200",
-                              id: new Date().getTime(),
-                            },
-                          ])
-                        );
-                      });
-                  }
+                  setActionPanel(true);
                 }
               }}
               className={`bg-white hover:opacity-75 transition-all text-red-600 text-xs flex items-center justify-center space-x-2 h-10 w-28 px-3 rounded-md border border-red-300`}
@@ -492,6 +500,13 @@ const BalanceSheet: FC<Props> = () => {
       </div>
       {/**Preview */}
       <PreviewPrint showPreview={showPreview} setPreview={setPreview} />
+      {/**Action Panel */}
+      <ActionPanel
+        openPanel={openPanel}
+        setActionPanel={setActionPanel}
+        option={tab === "debt" ? "Credit(s)" : "Transaction(s)"}
+        deleteSelected={tab === "debt" ? delete_credit : delete_payment}
+      />
     </div>
   );
 };

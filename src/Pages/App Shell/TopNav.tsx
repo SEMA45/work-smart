@@ -13,6 +13,7 @@ import { selectCurrency } from ".././../Redux/Slices/SchoolSettingsSlice";
 import PaymentOptions from "../../Components/Payment/PaymentOptions";
 import TermFilter from "./TermFilter";
 import UpdateNCreateSt from "../../Components/Student/UpdateNCreateSt";
+import AddCredit from "../../Components/Payment/AddCredit";
 
 type Props = {};
 
@@ -27,6 +28,7 @@ const TopNav: FC<Props> = () => {
   );
   const [paymentModal, setPayModal] = useState<boolean>(false);
   const [studentModal, setStudentModal] = useState(false);
+  const [creditModal, setCreditModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [studentObj, setstudentObj] = useState({
     student_id: "",
@@ -90,6 +92,9 @@ const TopNav: FC<Props> = () => {
                   <span className="mt-1">New Payment</span>
                 </button>
                 <button
+                onClick={()=>{
+                  setCreditModal(true)
+                }}
                   className="w-full row-span-1 hover:opacity-80 transition-all border-b border-gray-200 flex items-center space-x-2 focus:outline-none"
                 >
                   <TbReportMoney className="text-lg" />
@@ -137,6 +142,7 @@ const TopNav: FC<Props> = () => {
         edit={edit}
         setEdit={setEdit}
       />
+      <AddCredit creditModal={creditModal} setCreditModal={setCreditModal}/>
     </>
   );
 };

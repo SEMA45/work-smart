@@ -6,10 +6,11 @@ import { updateAlert } from "../../Redux/Slices/NotificationsSlice";
 import { updateStudents_Data } from "../../Redux/Slices/School_DataSlice";
 import PreviewPrint from "../../Components/Payment/PreviewPrint";
 import UpdateNCreateSt from "../../Components/Student/UpdateNCreateSt";
+import ActionPanel from "../../Components/Misc/ActionPanel";
 
 type Props = {};
 
-const Students:FC<Props> = () => {
+const Students: FC<Props> = () => {
   const user = useSelector((state: RootState) => state.UserInfo.user);
   const [search, setSearch] = useState<string>("");
   const dispatch: AppDispatch = useDispatch();
@@ -19,6 +20,7 @@ const Students:FC<Props> = () => {
   const [selectedArray, setSelected] = useState<any>([]);
   const [actionLoading, setAction] = useState<boolean>(false);
   const [showPreview, setPreview] = useState<boolean>(false);
+  const [openPanel, setActionPanel] = useState<boolean>(false);
   const students_data = useSelector(
     (state: RootState) => state.SchoolData.students
   )?.filter(
@@ -67,6 +69,51 @@ const Students:FC<Props> = () => {
     financial_status: "",
     active: true,
   });
+
+  //Delete Function
+  const deleteStudent = () => {
+    if (selectedArray?.length >= 1) {
+      setAction(true);
+      fetch(
+        `https://script.google.com/macros/s/AKfycbzXHls5in39Y_GmlGSUhxMI_VmHvklhFVXyB72A6TkhQOzoRxjboNtZMQYGmuDQGcSTaA/exec?action=delete_student&schoolID=${
+          user?.school_id
+        }&data=${selectedArray?.toString()}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setSelected([]);
+          dispatch(updateStudents_Data(data[0]?.students));
+          window.localStorage.setItem(
+            "students",
+            JSON.stringify(data[0]?.students)
+          );
+          setAction(false);
+          dispatch(
+            updateAlert([
+              ...alerts,
+              {
+                message: "Student(s) deleted successfully",
+                color: "bg-green-200",
+                id: new Date().getTime(),
+              },
+            ])
+          );
+        })
+        .catch(() => {
+          setAction(false);
+          dispatch(
+            updateAlert([
+              ...alerts,
+              {
+                message: "Failed to delete please retry",
+                color: "bg-red-200",
+                id: new Date().getTime(),
+              },
+            ])
+          );
+        });
+    }
+  };
 
   const students_list =
     students_data?.length >= 1 &&
@@ -146,7 +193,7 @@ const Students:FC<Props> = () => {
               onClick={() => {
                 setStudentModal(true);
                 setstudentObj(student);
-				setEdit(true)
+                setEdit(true);
               }}
               className="absolute right-4 top-2.5 h-6 px-3 pt-0.5 bg-blue-200 text-slate-800 rounded-full cursor-pointer"
             >
@@ -188,48 +235,9 @@ const Students:FC<Props> = () => {
               </span>
             </button>
             <button
+              disabled={selectedArray?.length >= 1 ? false : true}
               onClick={() => {
-                if (selectedArray?.length >= 1) {
-                  setAction(true);
-                  fetch(
-                    `https://script.google.com/macros/s/AKfycbzXHls5in39Y_GmlGSUhxMI_VmHvklhFVXyB72A6TkhQOzoRxjboNtZMQYGmuDQGcSTaA/exec?action=delete_student&schoolID=${
-                      user?.school_id
-                    }&data=${selectedArray?.toString()}`
-                  )
-                    .then((res) => res.json())
-                    .then((data) => {
-                      setSelected([]);
-                      dispatch(updateStudents_Data(data[0]?.students));
-                      window.localStorage.setItem(
-                        "students",
-                        JSON.stringify(data[0]?.students)
-                      );
-                      setAction(false);
-                      dispatch(
-                        updateAlert([
-                          ...alerts,
-                          {
-                            message: "Student(s) deleted successfully",
-                            color: "bg-green-200",
-                            id: new Date().getTime(),
-                          },
-                        ])
-                      );
-                    })
-                    .catch(() => {
-                      setAction(false);
-                      dispatch(
-                        updateAlert([
-                          ...alerts,
-                          {
-                            message: "Failed to delete please retry",
-                            color: "bg-red-200",
-                            id: new Date().getTime(),
-                          },
-                        ])
-                      );
-                    });
-                }
+                setActionPanel(true);
               }}
               className={`bg-white hover:opacity-75 transition-all text-red-600 text-xs flex items-center justify-center space-x-2 h-10 w-28 px-3 rounded-md border border-red-300`}
             >
@@ -308,6 +316,13 @@ const Students:FC<Props> = () => {
         setstudentObj={setstudentObj}
         edit={edit}
         setEdit={setEdit}
+      />
+      {/**Delete Prompt */}
+      <ActionPanel
+        openPanel={openPanel}
+        setActionPanel={setActionPanel}
+        option={"Student"}
+        deleteSelected={deleteStudent}
       />
     </div>
   );

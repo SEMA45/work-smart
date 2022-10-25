@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { TbSchool, TbMail, TbLock } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import logo from "../../Asserts/blueLogo.png";
+import logo from "../../Asserts/smallicon.png";
 import signInImg from "../../Asserts/signin.png";
 import { AppDispatch, RootState } from "../../Redux/store";
 import { updateAlert } from "../../Redux/Slices/NotificationsSlice";
@@ -247,7 +247,7 @@ const SignIn: FC<Props> = () => {
       <div className="col-span-1 h-full flex flex-col justify-center items-center">
         {/**Logo */}
         <Link to="/">
-          <img src={logo} alt="logo" className="w-36 absolute left-2 top-2" />
+          <img src={logo} alt="logo" className="w-10 absolute left-2 top-2" />
         </Link>
         {/**Sign In Form */}
         <form
@@ -257,7 +257,6 @@ const SignIn: FC<Props> = () => {
           <h1 className="text-[2.5rem] font-bold text-gray-700">
             Welcome back
           </h1>
-          <h2 className="text-lg text-gray-500">Let's get you signed in.</h2>
           <label
             htmlFor="school_name"
             className="w-full flex justify-center mt-8 relative"
@@ -316,7 +315,7 @@ const SignIn: FC<Props> = () => {
           <button
             type="submit"
             disabled={submitStatus}
-            className={`mt-6 h-10 w-[80%] bg-blue-600 hover:opacity-80 transition-all duration-150 rounded-full text-white text-sm tracking-wide flex justify-center items-center space-x-2 ${
+            className={`mt-8 h-10 w-[80%] bg-blue-600 hover:opacity-80 transition-all duration-150 rounded-full text-white text-sm tracking-wide flex justify-center items-center space-x-2 ${
               submitStatus ? "opacity:80 cursor-not-allowed" : ""
             }`}
           >
@@ -328,7 +327,7 @@ const SignIn: FC<Props> = () => {
             <span>SignIn</span>{" "}
           </button>
           <span className="mt-12 text-sm text-gray-400">
-            &copy; Smartfee {new Date().getFullYear()}. All rights reserved.
+            &copy; Work-Smart {new Date().getFullYear()}. All rights reserved.
           </span>
         </form>
       </div>
@@ -336,8 +335,8 @@ const SignIn: FC<Props> = () => {
         style={{ backgroundImage: `url(${signInImg})` }}
         className="hidden lg:flex justify-centr items-center col-span-1 h-full bg-blue-600 bg-origin-content bg-auto bg-center bg-no-repeat relative"
       >
-        <h3 className="text-[2.5rem] font-medium leading-[2.8rem] text-font text-white text-center w-full absolute bottom-24">
-          Managing your levy,
+        <h3 className="text-[2.5rem] font-medium leading-[3rem] text-font text-white text-center w-full absolute bottom-24">
+          Managing your students,
           <br /> made easy
         </h3>
       </div>
