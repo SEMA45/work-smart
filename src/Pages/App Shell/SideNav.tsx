@@ -101,9 +101,9 @@ const SideNav: FC<Props> = () => {
             <span className="mt-1 hidden lg:flex">Overall Report</span>
           </NavLink>
           <NavLink
-            to=""
+            to="/app/students"
             className={`h-10 w-full flex items-center space-x-2 px-4 text-sm text-white ${
-              location.pathname === "/students-management"
+              location.pathname === "/app/students"
                 ? "border-l-4 border-white bg-white/20"
                 : "border-l-4 border-transparent"
             }`}

@@ -40,7 +40,7 @@ const PreviewPrint: FC<Props> = ({ showPreview, setPreview }) => {
       {/**Close Button */}
       <div className="w-full min-h-[40rem] h-fit max-w-[38rem] rounded bg-white p-6 relative">
         <div className="flex justify-between items-center h-10 text-3xl font-semibold text-slate-700 uppercase">
-          <h1 className="mt-2">Invoice</h1>
+          <h1 className="mt-2">Statement</h1>
           <button
             onClick={() => {
               window.print();

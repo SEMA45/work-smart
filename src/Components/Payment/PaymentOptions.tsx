@@ -177,7 +177,7 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
   //companent
   return (
     <div
-      className={`w-screen h-screen bg-slate-900/40 fixed left-0 right-0 top-0 bottom-0 z-[99999]
+      className={`bg-slate-900/70 fixed left-0 right-0 -top-6 bottom-0 z-[99999]
        p-6 pt-14 flex justify-center overflow-hidden overflow-y-scroll no-scrollbar no-scrollbar::-webkit-scrollbar ${
          paymentModal ? "" : "hidden"
        }`}
@@ -187,7 +187,7 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
         disabled={loading}
         onClick={() => setPayModal(false)}
         type="button"
-        className="h-6 w-6 absolute top-3 right-3 rounded-sm bg-red-600 text-white text-sm"
+        className="h-6 w-6 absolute top-8 right-3 rounded-sm bg-red-600 text-white text-sm"
       >
         &times;
       </button>
@@ -241,7 +241,7 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
               }}
             />
             {!showCredits && payment_obj?.student_name?.length >= 1 && (
-              <div className="bg-blue-100 border border-slate-300 rounded-full flex justify-between items-center h-7 text-xs text-slate-600 px-2 p-1 space-x-2">
+              <div className="bg-blue-100 border border-slate-00 rounded-full flex justify-between items-center h-7 text-xs text-slate-600 px-2 p-1 space-x-2">
                 <span className="h-full pt-0.5 px-2">
                   {payment_obj?.student_name}
                 </span>

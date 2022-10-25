@@ -7,10 +7,12 @@ import {
   TbCreditCard,
   TbUsers,
   TbFriends,
+  TbReportMoney,
 } from "react-icons/tb";
 import { selectCurrency } from ".././../Redux/Slices/SchoolSettingsSlice";
 import PaymentOptions from "../../Components/Payment/PaymentOptions";
 import TermFilter from "./TermFilter";
+import UpdateNCreateSt from "../../Components/Student/UpdateNCreateSt";
 
 type Props = {};
 
@@ -24,6 +26,25 @@ const TopNav: FC<Props> = () => {
     (state: RootState) => state.SchoolSettings.selectedCurrency
   );
   const [paymentModal, setPayModal] = useState<boolean>(false);
+  const [studentModal, setStudentModal] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [studentObj, setstudentObj] = useState({
+    student_id: "",
+    student_name: "",
+    school_id: user?.school_id,
+    gender: "",
+    dob: "",
+    grade: "",
+    parent_name: "",
+    parent_type: "",
+    phone: "",
+    email: "",
+    address: "",
+    area: "",
+    province: "",
+    financial_status: "",
+    active: true,
+  });
 
   //Component =====
   return (
@@ -49,7 +70,7 @@ const TopNav: FC<Props> = () => {
             </select>
           </div>
           <div className="h-8 w-8 lg:w-36 border-l-0 border border-gray-200 rounded-r text-gray-700 capitalize text-sm flex items-center pt-1 px-2 relative">
-            <TermFilter/>
+            <TermFilter />
           </div>
         </div>
 
@@ -68,7 +89,16 @@ const TopNav: FC<Props> = () => {
                   <TbCreditCard className="text-lg" />
                   <span className="mt-1">New Payment</span>
                 </button>
-                <button className="w-full row-span-1 hover:opacity-80 transition-all border-b border-gray-200 flex items-center space-x-2 focus:outline-none">
+                <button
+                  className="w-full row-span-1 hover:opacity-80 transition-all border-b border-gray-200 flex items-center space-x-2 focus:outline-none"
+                >
+                  <TbReportMoney className="text-lg" />
+                  <span className="mt-1">New Debt</span>
+                </button>
+                <button
+                  onClick={() => setStudentModal(true)}
+                  className="w-full row-span-1 hover:opacity-80 transition-all border-b border-gray-200 flex items-center space-x-2 focus:outline-none"
+                >
                   <TbFriends className="text-lg" />
                   <span className="mt-1">New Student</span>
                 </button>
@@ -99,6 +129,14 @@ const TopNav: FC<Props> = () => {
 
       {/**Modals */}
       <PaymentOptions paymentModal={paymentModal} setPayModal={setPayModal} />
+      <UpdateNCreateSt
+        studentModal={studentModal}
+        setStudentModal={setStudentModal}
+        studentObj={studentObj}
+        setstudentObj={setstudentObj}
+        edit={edit}
+        setEdit={setEdit}
+      />
     </>
   );
 };

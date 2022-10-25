@@ -170,8 +170,9 @@ const BalanceSheet: FC<Props> = () => {
               }}
               className="absolute right-4 top-2.5 h-6 px-3 pt-0.5 bg-blue-200 text-slate-800 rounded-full cursor-pointer"
             >
-				<div className="h-full w-fufll flex justify-center items-center lowercase">view</div>
-              
+              <div className="h-full w-fufll flex justify-center items-center lowercase">
+                view
+              </div>
             </td>
           </tr>
         );
@@ -376,6 +377,14 @@ const BalanceSheet: FC<Props> = () => {
                         setSelected([]);
                         dispatch(updatePayments_Data(data[0]?.payment_data));
                         dispatch(updateCredits_Data(data[0]?.credits));
+                        window.localStorage.setItem(
+                          "payments_record",
+                          JSON.stringify(data[0]?.payment_data)
+                        );
+                        window.localStorage.setItem(
+                          "credits",
+                          JSON.stringify(data[0]?.credits)
+                        );
                         setAction(false);
                         dispatch(
                           updateAlert([
