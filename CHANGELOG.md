@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/Sands-45/smartfee/compare/v0.1.2...v0.1.3) (2022-10-26)
+
+
+### Features
+
+* balance sheet and Credit Debt Sheet is now more inteactive with a delete feature ([6dd6906](https://github.com/Sands-45/smartfee/commit/6dd690650c1507b776708560b6cb34ea2047febb))
+* new credits can be addded and bulk update students grades ([e76ed8e](https://github.com/Sands-45/smartfee/commit/e76ed8ed8e9dba44926be5069e85a53124910fe1))
+
 ### [0.1.2](https://github.com/Sands-45/smartfee/compare/v0.1.1...v0.1.2) (2022-10-23)
 
 
