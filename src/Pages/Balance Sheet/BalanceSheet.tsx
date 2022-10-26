@@ -229,9 +229,8 @@ const BalanceSheet: FC<Props> = () => {
             <td className="pt-4 pl-5 w-[5%] h-full text-left flex items-center">
               {index + 1}
             </td>
-            <td className="pt-2 text-left p-1 whitespace-nowrap overflow-hidden overflow-ellipsis h-10 w-[17.5%] flex flex-col">
+            <td className="pt-4 text-left p-1 whitespace-nowrap overflow-hidden overflow-ellipsis h-10 w-[17.5%] flex flex-col">
               <strong>{payment?.student_name}</strong>
-              <span className="text-slate-500">[ID-{payment?.id}]</span>
             </td>
             <td className="pt-2 text-left p-1 whitespace-nowrap overflow-hidden overflow-ellipsis h-10 w-[17.5%] flex flex-col">
               <span>{payment?.type}</span>

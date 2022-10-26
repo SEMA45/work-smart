@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../Redux/store";
 import { TbSearch, TbTrash, TbSquareCheck, TbSquare } from "react-icons/tb";
@@ -20,6 +20,7 @@ const Students: FC<Props> = () => {
   const [selectedArray, setSelected] = useState<any>([]);
   const [actionLoading, setAction] = useState<boolean>(false);
   const [showPreview, setPreview] = useState<boolean>(false);
+  const [gradeValue, setGradeValue] = useState<string>("");
   const [openPanel, setActionPanel] = useState<boolean>(false);
   const students_data = useSelector(
     (state: RootState) => state.SchoolData.students
@@ -46,6 +47,11 @@ const Students: FC<Props> = () => {
         ?.replace(/\s/gim, "")
         ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
       data?.address
+        ?.toLowerCase()
+        ?.replace(/\s/gim, "")
+        ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
+      data?.grade
+        ?.toString()
         ?.toLowerCase()
         ?.replace(/\s/gim, "")
         ?.includes(search?.toLowerCase()?.replace(/\s/gim, ""))
@@ -113,6 +119,51 @@ const Students: FC<Props> = () => {
           );
         });
     }
+  };
+
+  //Upgrade Grade
+  const upgradeGrade = () => {
+    setAction(true);
+    fetch(
+      `https://script.google.com/macros/s/AKfycbzXHls5in39Y_GmlGSUhxMI_VmHvklhFVXyB72A6TkhQOzoRxjboNtZMQYGmuDQGcSTaA/exec?action=upgrade_students&schoolID=${
+        user?.school_id
+      }&grade=${gradeValue}&data=${selectedArray?.toString()}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setSelected([]);
+        dispatch(updateStudents_Data(data[0]?.students));
+        window.localStorage.setItem(
+          "students",
+          JSON.stringify(data[0]?.students)
+        );
+        setAction(false);
+        setGradeValue("");
+        dispatch(
+          updateAlert([
+            ...alerts,
+            {
+              message: "Student(s) grade updated successfully",
+              color: "bg-green-200",
+              id: new Date().getTime(),
+            },
+          ])
+        );
+      })
+      .catch(() => {
+        setAction(false);
+        setGradeValue("");
+        dispatch(
+          updateAlert([
+            ...alerts,
+            {
+              message: "Failed to update please retry",
+              color: "bg-red-200",
+              id: new Date().getTime(),
+            },
+          ])
+        );
+      });
   };
 
   const students_list =
@@ -212,6 +263,35 @@ const Students: FC<Props> = () => {
     >
       <nav className="h-12 w-full flex items-center justify-between">
         <div className="flex items-center space-x-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (selectedArray?.length >= 1) {
+                upgradeGrade();
+              }
+            }}
+            className="flex items-center"
+          >
+            <button
+              type="submit"
+              className={`bg-blue-600 hover:opacity-75 transition-all text-white text-xs flex items-center justify-center space-x-2 h-10 w-32 rounded-l-md`}
+            >
+              <span className="pt-1">Update grade</span>
+            </button>
+            <input
+              onChange={(e) => {
+                setGradeValue(e.target.value);
+              }}
+              value={gradeValue}
+              type="text"
+              name="grade"
+              id="grade"
+              required
+              autoComplete="off"
+              placeholder="Grade here"
+              className="h-10 w-36 px-2 pt-0.5 rounded-r-md border border-blue-600 outline-none focus:ring-0 focus:outline-none"
+            />
+          </form>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => {

@@ -6,7 +6,7 @@ import {
   updatePayments_Data,
   updateCredits_Data,
 } from "../../Redux/Slices/School_DataSlice";
-import useOnClickOutside from "../../Custom-Hooks/useOnClickOutsideRef"
+import useOnClickOutside from "../../Custom-Hooks/useOnClickOutsideRef";
 
 type Props = {
   paymentModal: any;
@@ -43,29 +43,31 @@ const PaymentOptions: FC<Props> = ({ paymentModal, setPayModal }) => {
     (state: RootState) => state.SchoolData.credits_record
   );
   const [search, searchValue] = useState("");
-  const [ showCredits, setCredits] = useState<Boolean>(false)
+  const [showCredits, setCredits] = useState<Boolean>(false);
   const searchResults = useMemo(() => {
-    return credits_data?.filter(
-      (data: any) =>
-        data?.student_name
-          ?.toLowerCase()
-          ?.replace(/\s/gim, "")
-          ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
-        data?.term_ref
-          ?.toLowerCase()
-          ?.replace(/\s/gim, "")
-          ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
-        data?.type
-          ?.toLowerCase()
-          ?.replace(/\s/gim, "")
-          ?.includes(search?.toLowerCase()?.replace(/\s/gim, ""))
-    )?.slice(0,5);
+    return credits_data
+      ?.filter(
+        (data: any) =>
+          data?.student_name
+            ?.toLowerCase()
+            ?.replace(/\s/gim, "")
+            ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
+          data?.term_ref
+            ?.toLowerCase()
+            ?.replace(/\s/gim, "")
+            ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
+          data?.type
+            ?.toLowerCase()
+            ?.replace(/\s/gim, "")
+            ?.includes(search?.toLowerCase()?.replace(/\s/gim, ""))
+      )
+      ?.slice(0, 5);
   }, [credits_data, search]);
 
   //Close search modal on click utside
-  const studentsRef = useOnClickOutside(()=>{
-    setCredits(false)
-  })
+  const studentsRef = useOnClickOutside(() => {
+    setCredits(false);
+  });
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
