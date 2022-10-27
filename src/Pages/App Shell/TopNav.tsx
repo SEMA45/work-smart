@@ -41,6 +41,7 @@ const TopNav: FC<Props> = () => {
     parent_type: "",
     phone: "",
     email: "",
+    class_name:"",
     address: "",
     area: "",
     province: "",

@@ -65,9 +65,9 @@ const PreviewPrint: FC<Props> = ({ showPreview, setPreview }) => {
               </span>
             </li>}
             <li>
-              Student ID :{" "}
+              Student Grade:{" "}
               <span className="text-slate-500">
-                {payment_object?.student_id}
+                {payment_object?.grade}
               </span>
             </li>
             <li>

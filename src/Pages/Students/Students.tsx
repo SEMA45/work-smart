@@ -21,6 +21,7 @@ const Students: FC<Props> = () => {
   const [actionLoading, setAction] = useState<boolean>(false);
   const [showPreview, setPreview] = useState<boolean>(false);
   const [gradeValue, setGradeValue] = useState<string>("");
+  const [classValue, setClassValue] = useState<string>("");
   const [openPanel, setActionPanel] = useState<boolean>(false);
   const students_data = useSelector(
     (state: RootState) => state.SchoolData.students
@@ -55,6 +56,12 @@ const Students: FC<Props> = () => {
         ?.toLowerCase()
         ?.replace(/\s/gim, "")
         ?.includes(search?.toLowerCase()?.replace(/\s/gim, ""))
+        ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
+      data?.class_name
+        ?.toString()
+        ?.toLowerCase()
+        ?.replace(/\s/gim, "")
+        ?.includes(search?.toLowerCase()?.replace(/\s/gim, ""))
   );
   const [studentModal, setStudentModal] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -69,6 +76,7 @@ const Students: FC<Props> = () => {
     parent_type: "",
     phone: "",
     email: "",
+    class_name: "",
     address: "",
     area: "",
     province: "",
@@ -127,7 +135,7 @@ const Students: FC<Props> = () => {
     fetch(
       `https://script.google.com/macros/s/AKfycbzXHls5in39Y_GmlGSUhxMI_VmHvklhFVXyB72A6TkhQOzoRxjboNtZMQYGmuDQGcSTaA/exec?action=upgrade_students&schoolID=${
         user?.school_id
-      }&grade=${gradeValue}&data=${selectedArray?.toString()}`
+      }&grade=${gradeValue}&class_name=${classValue}&data=${selectedArray?.toString()}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -139,6 +147,7 @@ const Students: FC<Props> = () => {
         );
         setAction(false);
         setGradeValue("");
+        setClassValue("");
         dispatch(
           updateAlert([
             ...alerts,
@@ -153,6 +162,7 @@ const Students: FC<Props> = () => {
       .catch(() => {
         setAction(false);
         setGradeValue("");
+        setClassValue("");
         dispatch(
           updateAlert([
             ...alerts,
@@ -225,8 +235,9 @@ const Students: FC<Props> = () => {
             <td className="pt-4 text-left p-1 whitespace-nowrap overflow-hidden overflow-ellipsis h-10 w-[15%] flex flex-col">
               <strong>{student?.student_name}</strong>
             </td>
-            <td className="pt-4 text-left p-1 whitespace-nowrap overflow-hidden overflow-ellipsis h-10 w-[10%] flex flex-col">
-              <span>{student?.grade}</span>
+            <td className="pt-2 text-left p-1 whitespace-nowrap overflow-hidden overflow-ellipsis h-10 w-[10%] flex flex-col">
+              <span>Grade - {student?.grade}</span>
+              <span>Class - {student?.class_name}</span>
             </td>
             <td className="pt-2 text-left p-1 whitespace-nowrap overflow-hidden overflow-ellipsis h-10 w-[15%] flex flex-col">
               <span>{student?.parent_name}</span>
@@ -288,8 +299,21 @@ const Students: FC<Props> = () => {
               id="grade"
               required
               autoComplete="off"
-              placeholder="Grade here"
-              className="h-10 w-36 px-2 pt-0.5 rounded-r-md border border-blue-600 outline-none focus:ring-0 focus:outline-none"
+              placeholder="Grade"
+              className="h-10 w-20 px-2 pt-0.5 border-y border-blue-300 outline-none focus:ring-0 focus:outline-none"
+            />
+            <input
+              onChange={(e) => {
+                setClassValue(e.target.value);
+              }}
+              value={classValue}
+              type="text"
+              name="class_name"
+              id="class_name"
+              required
+              autoComplete="off"
+              placeholder="Class "
+              className="h-10 w-20 px-2 pt-0.5 rounded-r-md border border-blue-300 outline-none focus:ring-0 focus:outline-none"
             />
           </form>
           <div className="flex items-center space-x-2">
@@ -357,7 +381,7 @@ const Students: FC<Props> = () => {
                 Student
               </th>
               <th className="pt-3 w-[10%] h-full text-left whitespace-nowrap overflow-hidden overflow-ellipsis">
-                Grade
+                Grade & Class
               </th>
               <th className="pt-3 w-[15%] h-full text-left whitespace-nowrap overflow-hidden overflow-ellipsis">
                 Parent

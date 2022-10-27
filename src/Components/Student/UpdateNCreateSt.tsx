@@ -236,32 +236,43 @@ const UpdateNCreateSt: FC<Props> = ({
 
           {/**DOB ========== */}
           <fieldset className="w-full h-20 rounded border border-slate-300 p-2 pt-0">
-            <legend className="p-1 text-slate-500">Date of birth</legend>{studentObj?.dob ?<input
-              onChange={(e) => {
-                setstudentObj((prev: any) => ({
-                  ...prev,
-                  dob: new Date(e.target.value ? e.target.value : "").getTime(),
-                }));
-              }}
-			  value={new Date(studentObj?.dob).toLocaleString()?.split(",")[0]}
-              required
-              type="text"
-              name="dob"
-              id="dob"
-              className="w-full h-10 rounded focus:border-0 focus:ring-0 focus:outline-none uppercase text-sm text-slate-700"
-            />:<input
-              onChange={(e) => {
-                setstudentObj((prev: any) => ({
-                  ...prev,
-                  dob: new Date(e.target.value ? e.target.value : "").getTime(),
-                }));
-              }}
-              required
-              type="date"
-              name="dob"
-              id="dob"
-              className="w-full h-10 rounded focus:border-0 focus:ring-0 focus:outline-none uppercase text-sm text-slate-700"
-            />}
+            <legend className="p-1 text-slate-500">Date of birth</legend>
+            {studentObj?.dob ? (
+              <input
+                onChange={(e) => {
+                  setstudentObj((prev: any) => ({
+                    ...prev,
+                    dob: new Date(
+                      e.target.value ? e.target.value : ""
+                    ).getTime(),
+                  }));
+                }}
+                value={
+                  new Date(studentObj?.dob).toLocaleString()?.split(",")[0]
+                }
+                required
+                type="text"
+                name="dob"
+                id="dob"
+                className="w-full h-10 rounded focus:border-0 focus:ring-0 focus:outline-none uppercase text-sm text-slate-700"
+              />
+            ) : (
+              <input
+                onChange={(e) => {
+                  setstudentObj((prev: any) => ({
+                    ...prev,
+                    dob: new Date(
+                      e.target.value ? e.target.value : ""
+                    ).getTime(),
+                  }));
+                }}
+                required
+                type="date"
+                name="dob"
+                id="dob"
+                className="w-full h-10 rounded focus:border-0 focus:ring-0 focus:outline-none uppercase text-sm text-slate-700"
+              />
+            )}
           </fieldset>
 
           {/**Grade ========== */}
@@ -281,6 +292,26 @@ const UpdateNCreateSt: FC<Props> = ({
               name="grade"
               id="grade"
               className="w-full h-10 rounded focus:border-0 focus:ring-0 focus:outline-none capitalize text-slate-700"
+            />
+          </fieldset>
+
+          {/**Class Name ========== */}
+          <fieldset className="w-full h-20 rounded border border-slate-300 p-2 pt-0">
+            <legend className="p-1 text-slate-500">Class Name</legend>
+            <input
+              onChange={(e) => {
+                setstudentObj((prev: any) => ({
+                  ...prev,
+                  class_name: e.target.value,
+                }));
+              }}
+              value={studentObj?.class_name}
+              type="text"
+              required
+              placeholder="Class e.g 2c"
+              name="class_name"
+              id="class_name"
+              className="w-full h-10 rounded focus:border-0 focus:ring-0 focus:outline-none text-slate-700"
             />
           </fieldset>
 
@@ -374,6 +405,26 @@ const UpdateNCreateSt: FC<Props> = ({
               placeholder="address"
               name="address"
               id="address"
+              className="w-full h-10 rounded focus:border-0 focus:ring-0 focus:outline-none capitalize text-slate-700"
+            />
+          </fieldset>
+
+          {/**Area ========== */}
+          <fieldset className="w-full h-20 rounded border border-slate-300 p-2 pt-0">
+            <legend className="p-1 text-slate-500">Area</legend>
+            <input
+              onChange={(e) => {
+                setstudentObj((prev: any) => ({
+                  ...prev,
+                  area: e.target.value,
+                }));
+              }}
+              value={studentObj?.area}
+              type="text"
+              required
+              placeholder="area"
+              name="area"
+              id="area"
               className="w-full h-10 rounded focus:border-0 focus:ring-0 focus:outline-none capitalize text-slate-700"
             />
           </fieldset>
