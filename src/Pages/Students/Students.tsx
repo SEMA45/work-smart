@@ -28,26 +28,32 @@ const Students: FC<Props> = () => {
   )?.filter(
     (data: any) =>
       data?.student_name
+        ?.toString()
         ?.toLowerCase()
         ?.replace(/\s/gim, "")
         ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
       data?.gender
+        ?.toString()
         ?.toLowerCase()
         ?.replace(/\s/gim, "")
         ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
       data?.parent_name
+        ?.toString()
         ?.toLowerCase()
         ?.replace(/\s/gim, "")
         ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
       data?.parent_type
+        ?.toString()
         ?.toLowerCase()
         ?.replace(/\s/gim, "")
         ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
       data?.financial_status
+        ?.toString()
         ?.toLowerCase()
         ?.replace(/\s/gim, "")
         ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
       data?.address
+        ?.toString()
         ?.toLowerCase()
         ?.replace(/\s/gim, "")
         ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
@@ -55,7 +61,6 @@ const Students: FC<Props> = () => {
         ?.toString()
         ?.toLowerCase()
         ?.replace(/\s/gim, "")
-        ?.includes(search?.toLowerCase()?.replace(/\s/gim, ""))
         ?.includes(search?.toLowerCase()?.replace(/\s/gim, "")) ||
       data?.class_name
         ?.toString()
