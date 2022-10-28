@@ -15,7 +15,7 @@ type Props = {};
 
 const BalanceSheet: FC<Props> = () => {
   const user = useSelector((state: RootState) => state.UserInfo.user);
-  const [tab, setTab] = useState<string>("payments");
+  const [tab, setTab] = useState<string>("debt");
   const [search, setSearch] = useState<string>("");
   const selectedCurrency = useSelector(
     (state: RootState) => state.SchoolSettings.selectedCurrency
@@ -367,25 +367,25 @@ const BalanceSheet: FC<Props> = () => {
           <div className="flex items-center">
             <button
               onClick={() => {
-                setTab("payments");
-                setSelected([]);
-              }}
-              className={`${
-                tab === "payments" ? "bg-blue-600" : "bg-blue-400"
-              } text-white text-xs flex items-center justify-center h-10 w-20 px-3 rounded-l-md hover:opacity-75 transition-all border-r border-blue-300`}
-            >
-              Payments
-            </button>
-            <button
-              onClick={() => {
                 setTab("debt");
                 setSelected([]);
               }}
               className={`${
                 tab !== "payments" ? "bg-blue-600" : "bg-blue-400"
-              } text-white text-xs flex items-center justify-center h-10 w-20 px-3 rounded-r-md hover:opacity-75 transition-all`}
+              } text-white text-xs flex items-center justify-center h-10 w-24 px-3 rounded-l-md hover:opacity-75 transition-all border-r border-blue-300`}
             >
-              Debts
+              Outstanding
+            </button>
+            <button
+              onClick={() => {
+                setTab("payments");
+                setSelected([]);
+              }}
+              className={`${
+                tab === "payments" ? "bg-blue-600" : "bg-blue-400"
+              } text-white text-xs flex items-center justify-center h-10 w-24 px-3 rounded-r-md hover:opacity-75 transition-all`}
+            >
+              Payments
             </button>
           </div>
           <div className="flex items-center space-x-2">
