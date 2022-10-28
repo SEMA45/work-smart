@@ -474,7 +474,7 @@ const BalanceSheet: FC<Props> = () => {
                   Select
                 </th>
                 <th className="pt-3 w-[5%] h-full text-left">Index</th>
-                <th className="pt-3 w-[17.5%] h-full text-left">Payment For</th>
+                <th className="pt-3 w-[17.5%] h-full text-left">For</th>
                 <th className="pt-3 w-[17.5%] h-full text-left">Type</th>
                 <th className="pt-3 w-[17.5%] h-full text-left">grade</th>
                 <th className="pt-3 w-[17.5%] h-full text-left">Amount ($)</th>

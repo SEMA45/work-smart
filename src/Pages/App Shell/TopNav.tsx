@@ -14,6 +14,7 @@ import PaymentOptions from "../../Components/Payment/PaymentOptions";
 import TermFilter from "./TermFilter";
 import UpdateNCreateSt from "../../Components/Student/UpdateNCreateSt";
 import AddCredit from "../../Components/Payment/AddCredit";
+import CreateNEditUser from "../../Components/Team & Users/CreateNEditUser";
 
 type Props = {};
 
@@ -48,6 +49,19 @@ const TopNav: FC<Props> = () => {
     financial_status: "",
     active: true,
   });
+  const [teamModal, setteamModal] = useState(false);
+  const [edittwo, setEditTwo] = useState(false);
+  const [teamObj, setteamObj] = useState({
+    uid: "",
+    username: "",
+    email: "",
+    password: "",
+    school_name: user?.school_name,
+    school_type: user?.school_type,
+    role: "",
+    profile_url: "",
+    signIn_status: false,
+  });
 
   //Component =====
   return (
@@ -80,7 +94,7 @@ const TopNav: FC<Props> = () => {
         <div className="h-full flex items-center space-x-2">
           {/** New Btn and Modal*/}
           <div className="relative group">
-            <div className="bg-blue-600 hover:bg-blue-500 transition-all rounded-full px-4 pt-0.5 h-9 w-28 text-white text-base flex justify-center items-center select-none cursor-pointer">
+            <div className="bg-blue-600 hover:bg-blue-500 transition-all rounded-full px-4 pt-0.5 h-8 w-28 text-white text-sm flex justify-center items-center select-none cursor-pointer">
               New
             </div>
             <div className="absolute top-8 -left-16 pt-2 hidden group-hover:flex z-[9999]">
@@ -93,9 +107,9 @@ const TopNav: FC<Props> = () => {
                   <span className="mt-1">New Payment</span>
                 </button>
                 <button
-                onClick={()=>{
-                  setCreditModal(true)
-                }}
+                  onClick={() => {
+                    setCreditModal(true);
+                  }}
                   className="w-full row-span-1 hover:opacity-80 transition-all border-b border-gray-200 flex items-center space-x-2 focus:outline-none"
                 >
                   <TbReportMoney className="text-lg" />
@@ -108,7 +122,10 @@ const TopNav: FC<Props> = () => {
                   <TbFriends className="text-lg" />
                   <span className="mt-1">New Student</span>
                 </button>
-                <button className="w-full row-span-1 hover:opacity-80 transition-all flex items-center space-x-2 focus:outline-none">
+                <button
+                  onClick={() => setteamModal(true)}
+                  className="w-full row-span-1 hover:opacity-80 transition-all flex items-center space-x-2 focus:outline-none"
+                >
                   <TbUsers className="text-lg" />
                   <span className="mt-1">New User</span>
                 </button>
@@ -117,18 +134,16 @@ const TopNav: FC<Props> = () => {
           </div>
           {/** New Btn and Modal*/}
 
-          <button className="h-8 w-8 flex items-center justify-center text-gray-600 bg-blue-100 border border-gray-300 text-xl hover:border-blue-400 hover:bg-blue-200 rounded-lg transition-all">
+          <button className="h-8 w-8 flex items-center justify-center text-gray-500 bg-blue-50 border border-gray-300 text-xl hover:border-blue-400 hover:bg-blue-200 rounded-md transition-all">
             <TbSpeakerphone />
           </button>
-          <button className="h-8 w-8 flex items-center justify-center text-gray-600 bg-blue-100 border border-gray-300 text-xl hover:border-blue-400 hover:bg-blue-200 rounded-lg transition-all">
+          <button className="h-8 w-8 flex items-center justify-center text-gray-500 bg-blue-50 border border-gray-300 text-xl hover:border-blue-400 hover:bg-blue-200 rounded-md transition-all">
             <TbBell />
           </button>
           {/**Profile ======== */}
-          <img
-            src={user?.profileUrl}
-            alt="profile"
-            className="h-9 w-9 object-cover object-center border-2 border-blue-600 rounded-full"
-          />
+          <div className="h-9 w-9 pt-1.5 rounded-full object-cover object-center border-2 border-blue-400 z-[99] bg-slate-400 text-white text-sm font-medium uppercase flex justify-center items-center">
+            <span>{user?.username?.charAt(0)}</span>
+          </div>
           {/**Profile ======== */}
         </div>
       </div>
@@ -143,7 +158,15 @@ const TopNav: FC<Props> = () => {
         edit={edit}
         setEdit={setEdit}
       />
-      <AddCredit creditModal={creditModal} setCreditModal={setCreditModal}/>
+      <CreateNEditUser
+        teamModal={teamModal}
+        setteamModal={setteamModal}
+        teamObj={teamObj}
+        setteamObj={setteamObj}
+        edit={edittwo}
+        setEdit={setEditTwo}
+      />
+      <AddCredit creditModal={creditModal} setCreditModal={setCreditModal} />
     </>
   );
 };
