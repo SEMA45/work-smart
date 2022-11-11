@@ -15,7 +15,7 @@ const PreviewPrint: FC<Props> = ({ showPreview, setPreview }) => {
   );
   const school_obj = useSelector(
     (state: RootState) => state.SchoolSettings.schoolObj
-  )?.other_settings?.split(/{|}|:|,/gim);
+  );
   const payment_object = useMemo(() => {
     let obj = window.localStorage.getItem("paymentInvoiceData");
     return showPreview && obj ? JSON.parse(obj) : {};
@@ -52,23 +52,25 @@ const PreviewPrint: FC<Props> = ({ showPreview, setPreview }) => {
         </div>
         <div className="mt-4 flex justify-between text-sm font-medium text-slate-700 py-2 border-y border-slate-200">
           <ul className="max-w-[48%] overflow-hidden">
-            {payment_object?.equivalent_amount_usd&&<li>
-              Payment ID :{" "}
-              <span className="text-slate-500">
-                {payment_object?.payment_id}
-              </span>
-            </li>}
-           {payment_object?.equivalent_amount_usd&& <li>
-              Payment Date :{" "}
-              <span className="text-slate-500">
-                {new Date(payment_object?.payment_date).toDateString()}
-              </span>
-            </li>}
+            {payment_object?.equivalent_amount_usd && (
+              <li>
+                Payment ID :{" "}
+                <span className="text-slate-500">
+                  {payment_object?.payment_id}
+                </span>
+              </li>
+            )}
+            {payment_object?.equivalent_amount_usd && (
+              <li>
+                Payment Date :{" "}
+                <span className="text-slate-500">
+                  {new Date(payment_object?.payment_date).toDateString()}
+                </span>
+              </li>
+            )}
             <li>
               Student Grade:{" "}
-              <span className="text-slate-500">
-                {payment_object?.grade}
-              </span>
+              <span className="text-slate-500">{payment_object?.grade}</span>
             </li>
             <li>
               Student Name :{" "}
@@ -76,22 +78,27 @@ const PreviewPrint: FC<Props> = ({ showPreview, setPreview }) => {
                 {payment_object?.student_name}
               </span>
             </li>
-            {payment_object?.equivalent_amount_usd&&<li>
-              Clerk's email :{" "}
-              <span className="text-slate-500">
-                {payment_object?.admin_email}
-              </span>
-            </li>}
+            {payment_object?.equivalent_amount_usd && (
+              <li>
+                Clerk's email :{" "}
+                <span className="text-slate-500">
+                  {payment_object?.admin_email}
+                </span>
+              </li>
+            )}
           </ul>
           <ul className="max-w-[48%] overflow-hidden text-right h-full">
             <li className="whitespace-nowrap overflow-hidden overflow-ellipsis">
-              {school_obj[2]}
+              {school_obj?.school_name}
             </li>
             <li>
-              <span className="text-slate-500">{school_obj[4]}</span>
+              <span className="text-slate-500">{school_obj?.address}</span>
             </li>
             <li>
-              <span className="text-slate-500">{school_obj[7]}</span>
+              <span className="text-slate-500">{school_obj?.email}</span>
+            </li>
+            <li>
+              <span className="text-slate-500">{school_obj?.phone}</span>
             </li>
           </ul>
         </div>

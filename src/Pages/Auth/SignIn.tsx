@@ -245,17 +245,17 @@ const SignIn: FC<Props> = () => {
   return (
     <div className="w-screen h-screen min-h-[40rem] grid grid-cols-1 lg:grid-cols-2">
       <div className="col-span-1 h-full flex flex-col justify-center items-center">
-        {/**Logo */}
-        <Link to="/">
-          <img src={logo} alt="logo" className="w-10 absolute left-2 top-2" />
-        </Link>
         {/**Sign In Form */}
         <form
           onSubmit={(e) => handleSignIn(e)}
           className="min-w-[25rem] max-w-[27rem] w-[55%] rounded-xl flex flex-col justify-center items-center p-8 relative"
         >
-          <h1 className="text-[2.5rem] font-bold text-gray-700">
-            Welcome back
+        
+          <h1 className="text-[2.5rem] font-bold text-gray-700 flex items-center">{/**Logo */}
+            Welc
+        <Link to="/">
+          <img src={logo} alt="logo" className="w-8" />
+        </Link>me back
           </h1>
           <label
             htmlFor="school_name"

@@ -51,19 +51,6 @@ const SideNav: FC<Props> = () => {
             V.{packageJson.version}
           </div>
         </div>
-        <label
-          htmlFor="uni_search"
-          className="w-full h-fit pt-5 pb-1 bg-inherit flex justify-center items-center relative"
-        >
-          <input
-            type="search"
-            name="uni_search"
-            id="uni_search"
-            className="h-8 w-[80%] lg:w-[90%] bg-white/20 rounded-full border border-gray-200/50 placeholder:text-xs placeholder:text-gray-100 text-gray-50 text-sm focus:ring-0 focus:outline-none focus:border-white transition-all px-3 pr-8"
-            placeholder="Quick find ..."
-          />
-          <TbSearch className="absolute right-6 text-gray-200" />
-        </label>
 
         {/**Nav List */}
         <div className="w-full fle fle-col mt-4">
@@ -134,9 +121,9 @@ const SideNav: FC<Props> = () => {
             <span className="mt-1 hidden lg:flex">Attendance Report</span>
           </NavLink>
           <NavLink
-            to=""
+            to="/app/settings"
             className={`h-10 w-full flex items-center space-x-2 px-4 text-sm text-white ${
-              location.pathname === "/settings"
+              location.pathname === "/app/settings"
                 ? "border-l-4 border-white bg-white/20"
                 : "border-l-4 border-transparent"
             }`}

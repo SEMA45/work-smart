@@ -94,7 +94,7 @@ const TopNav: FC<Props> = () => {
         <div className="h-full flex items-center space-x-2">
           {/** New Btn and Modal*/}
           <div className="relative group">
-            <div className="bg-blue-600 hover:bg-blue-500 transition-all rounded-full px-4 pt-0.5 h-8 w-28 text-white text-sm flex justify-center items-center select-none cursor-pointer">
+            <div className="bg-blue-600 hover:bg-blue-500 transition-all rounded px-4 pt-0.5 h-8 w-24 text-white text-sm flex justify-center items-center select-none cursor-pointer">
               New
             </div>
             <div className="absolute top-8 -left-16 pt-2 hidden group-hover:flex z-[9999]">
