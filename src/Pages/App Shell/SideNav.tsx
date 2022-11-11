@@ -1,9 +1,7 @@
-import { FC,useState } from "react";
+import { FC, useState } from "react";
 import packageJson from "../../../package.json";
-import logo from "../../Asserts/blueLogo.png";
 import shortLogo from "../../Asserts/smallicon.png";
 import {
-  TbSearch,
   TbSmartHome,
   TbChartDonut,
   TbChartAreaLine,
@@ -27,7 +25,7 @@ const SideNav: FC<Props> = () => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const user = useSelector((state: RootState) => state.UserInfo.user);
-  const [signingOut,setSigningOut] = useState<boolean>(false)
+  const [signingOut, setSigningOut] = useState<boolean>(false);
   const alerts = useSelector(
     (state: RootState) => state.NotificationsData.alerts
   );
@@ -37,11 +35,9 @@ const SideNav: FC<Props> = () => {
     <div className="min-w-[4rem] w-[4rem] lg:min-w-[14.5rem] lg:w-[14.5rem] h-full bg-blue-600 flex flex-col justify-between">
       <div className="w-ful h-fit">
         <div className="w-full min-h-[3.5rem] h-14 bg-blue-300 flex items-center justify-center lg:justify-between px-1 pr-3  relative overflow-hidden">
-          <img
-            src={logo}
-            alt="logo"
-            className="w-36 object-center hidden lg:flex"
-          />
+          <span className="w-36 object-center hidden lg:flex pt-2 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis text-lg font-bold text-blue-800">
+            {user?.school_name}
+          </span>
           <img
             src={shortLogo}
             alt="logo"
