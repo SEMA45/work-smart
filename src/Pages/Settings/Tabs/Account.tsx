@@ -17,7 +17,7 @@ const Account: FC<Props> = () => {
 
   //Component ==========
   return (
-    <div className="w-full h-full space-y-4 overflow-hidden overflow-y-scroll no-scrollbar::-webkit-scrollbar no-scrollbar">
+    <div className="w-full h-full space-y-4 overflow-hidden overflow-y-scroll pr-2">
       <form className="w-full h-[7.5rem] bg-white rounded-md grid grid-cols-4 overflow-hidden p-1 py-2">
         <div className="col-span-1 h-full overflow-hidden p-4 flex flex-col items-center justify-center space-y-2">
           <div className="text-center text-xs font-bold uppercase text-slate-600">
@@ -170,20 +170,53 @@ const Account: FC<Props> = () => {
                 />
               </div>
             </label>
-            <button className="mt-3 px-6 h-8 rounded-sm bg-blue-600 text-white text-xs uppercase">
+            <button className="mt-3 px-6 pt-0.5 h-8 rounded-sm bg-blue-600 text-white text-xs uppercase">
               Upload
             </button>
           </form>
         </div>
         {/**Plan */}
-        <div className="col-span-1 h-full overflow-hidden flex flex-col justify-between items-center p-6">
+        <div className="col-span-1 h-full overflow-hidden flex flex-col items-center justify-between p-6">
           <div className="text-base text-slate-600 font-bold">Plan</div>
+          <div className="mt-4 text-xs text-slate-500 font-medium text-center">
+            You are currently on a {school?.plan} plan.{" "}
+            {school?.plan === "basic"
+              ? "Upgrade to a pro plan/ pro plus to unleash the full potential with up-to 50 users, your logo as watermark, email invocing, attedance registers/reports and students performances."
+              : school?.plan === "pro"
+              ? "Upgrade to a pro plus plan to unleash the full potential with up-to 50 users, your logo as watermark, email invocing, attedance registers/reports and students performances."
+              : "Your are currently using the highest premium plan, thank you for supporting us to help you worrk smart."}
+          </div>
+          <button className="mt-4 px-4 pt-0.5 h-8 bg-blue-600 text-white text-xs uppercase rounded-sm">
+            Upgrade
+          </button>
         </div>
       </div>
 
-      <div className="w-full h-[15rem] bg-inherit grid grid-cols-2 gap-8 overflow-hidden">
-        <div className="h-[15rem] col-span-1 bg-white rounded-md overflow-hidden"></div>
-        <div className="h-[15rem] col-span-1 bg-white rounded-md overflow-hidden"></div>
+      <div className="w-full h-[20rem] bg-inherit grid grid-cols-2 gap-8 overflow-hidden">
+        <div className="h-[20rem] col-span-1 bg-white border border-slate-300 rounded-md overflow-hidden">
+          <div className="h-12 w-full bg-slate-50 px-4 flex items-center justify-between border-b border-slate-150">
+            <span className="pb-2 pt-2.5 text-slate-600">Currencies</span>{" "}
+            <button className="px-4 pt-0.5 h-7 bg-blue-200 border border-blue-300 text-slate-500 font-bold text-xs uppercase rounded-sm">
+              Add new
+            </button>
+          </div>
+          <table className="w-full h-[calc(100%-3rem)]">
+            <thead className="w-full h-12 bg-slate-100 sticky top-0 z-[99]">
+              <tr className="h-full w-full px-4 py-1 flex items-center justify-between text-sm text-slate-700">
+                <th className="pt-3 w-[34%] h-full text-left cursor-pointer whitespace-nowrap overflow-hidden overflow-ellipsis">
+                  Name
+                </th>
+                <th className="pt-3 w-[33%] h-full text-left whitespace-nowrap overflow-hidden overflow-ellipsis">
+                  Symbol
+                </th>
+                <th className="pt-3 w-[33%] h-full text-left whitespace-nowrap overflow-hidden overflow-ellipsis">
+                  Rate Per USD
+                </th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div className="h-[20rem] col-span-1 bg-white rounded-md overflow-hidden"></div>
       </div>
     </div>
   );
